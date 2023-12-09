@@ -12,11 +12,10 @@ CREATE TABLE IF NOT EXISTS Fazendeiro(
 	nome TEXT NOT NULL,
 	cpf VARCHAR(14) NOT NULL,
 	senha TEXT NOT NULL,
-	data_nascimento DATE NOT NULL,
-	telefone BIGINT NOT NULL,
+	idade INT NOT NULL,
+	telefone TEXT NOT NULL,
 	PRIMARY KEY(cpf)
 );
-
 CREATE TYPE tipoGenero AS ENUM('masculino', 'feminino');
 
 CREATE TABLE IF NOT EXISTS Bode(
@@ -31,6 +30,9 @@ CREATE TABLE IF NOT EXISTS Bode(
 
 CREATE TABLE IF NOT EXISTS Produto(
 	id SERIAL,
+	preco REAL,
+	peso REAL,
+	quantidade INT,
 	categoria TEXT NOT NULL,
 	descricao TEXT NOT NULL,
 	PRIMARY KEY(id)
@@ -43,3 +45,5 @@ CREATE TABLE IF NOT EXISTS Bode_produto(
 	CONSTRAINT id_produto FOREIGN KEY (id_produto) REFERENCES Produto(id),
 	PRIMARY KEY(id_bode, id_produto)
 );
+
+INSERT INTO Fazendeiro (nome, cpf, senha, idade, telefone) VALUES('atualizar','0', '0', 0, 0);
