@@ -14,7 +14,9 @@ public class Bode {
 		this.nome = nome;
 		this.genero = genero;
 	}
-	
+	public Bode() {
+		
+	}
 	public String getCpfFazendeiro() {
 		return cpfFazendeiro;
 	}
