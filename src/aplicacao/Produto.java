@@ -23,7 +23,9 @@ public class Produto {
 		this.Quantidade = Quantidade;
 		this.peso = peso;
 	}
-	
+	public Produto() {
+		
+	}
 	public int getId() {
 		return id;
 	}

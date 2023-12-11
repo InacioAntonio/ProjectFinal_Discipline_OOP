@@ -1,7 +1,9 @@
 package visao;
-import persistencia.FazendeiroDAO;
+import persistencia.*;
+import aplicacao.*;
 import aplicacao.Fazendeiro;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Principal {
 		public static void main(String[] args) {
@@ -11,7 +13,12 @@ public class Principal {
 			String cpf, nome, senha, telefone, cpfAtualiza;
 			int idade;
 			FazendeiroDAO fDAO;
-			
+			BodeDAO bd;
+			ProdutoDAO pd;
+			Bode bode;
+			Produto produto;
+			ArrayList<Bode> listaBode;
+			ArrayList<Produto> listaProduto;
 			do {
 				System.out.println("1 - Login");
 				System.out.println("2 - Cadastrar Fazendeiro");
@@ -52,6 +59,94 @@ public class Principal {
 									ler.nextLine();
 									
 									switch(opLogin) {
+									case 1:
+										bode = new Bode();
+										bd  = new BodeDAO();
+										bode.setCpfFazendeiro(fazendeiroSessao.getCpf());
+										System.out.println("Digite o nome do seu Bode");
+										bode.setNome(ler.nextLine());
+										System.out.println("Digite o genero do seu Bode");
+										bode.setGenero(ler.nextLine());
+										System.out.println("Digite o Peso do seu Bode");
+										bode.setPeso(ler.nextFloat());
+										bd.CadastrarBode(bode);
+										break;
+									case 2:
+										bd = new BodeDAO();
+										listaBode = bd.buscar(fazendeiroSessao.getCpf());
+										for (int i=0;i<listaBode.size();i++) {
+											System.out.println("ID: "+listaBode.get(i).getId());
+											System.out.println("Nome: "+listaBode.get(i).getNome());
+											System.out.println("Genero: "+listaBode.get(i).getGenero());
+											System.out.println("Peso: "+listaBode.get(i).getPeso());
+											System.out.println("Cpf_Fazendeiro: "+listaBode.get(i).getPeso());
+											
+										}
+										break;
+									case 3:
+										bd = new BodeDAO();
+										System.out.println("Digite o ID do seu Bode");
+										bode = bd.BuscarId(ler.nextInt());
+										if (bode != null) {
+											System.out.println("ID: "+bode.getId());
+											System.out.println("Nome: "+bode.getNome());
+											System.out.println("Genero: "+bode.getGenero());
+											System.out.println("Peso: "+bode.getPeso());
+											System.out.println("Cpf_Fazendeiro: "+bode.getCpfFazendeiro());
+											
+										}else {
+											System.out.println("Nada foi encontrado");
+										}
+										break;
+									case 4:
+										
+										break;
+									case 5:
+										
+										break;
+									case 6:
+										produto = new Produto();
+										System.out.println("Digite a Categoria do Produto");
+										produto.setCategoria(ler.nextLine());
+										System.out.println("Digite o Peso do Produto");
+										produto.setPeso(ler.nextFloat());
+										System.out.println("Digite a Descricao do Produto");
+										produto.setDescricao(ler.nextLine());
+										System.out.println("Digite a Quantidade do Produto");
+										produto.setQuantidade(ler.nextInt());
+										System.out.println("Digite o Preco do Produto");
+										produto.setPreco(ler.nextFloat());
+										pd = new ProdutoDAO();
+										pd.Cadastrar(produto);
+										break;
+									case 7:
+										pd = new ProdutoDAO();
+										System.out.println("Digite a Categoria do Produto");
+										listaProduto = pd.Buscar(ler.nextLine());
+										for (int i=0; i<listaProduto.size();i++) {
+											System.out.println("ID: "+listaProduto.get(i).getId());
+											System.out.println("Categoria: "+listaProduto.get(i).getCategoria());
+											System.out.println("Descricao: "+listaProduto.get(i).getDescricao());
+											System.out.println("Peso: "+listaProduto.get(i).getPeso());
+											System.out.println("Quantidade: "+listaProduto.get(i).getQuantidade());
+										}
+										break;
+									case 8:
+										pd = new ProdutoDAO();
+										System.out.println("Digite o Id do Produto da Busca");
+										produto = pd.Buscar(ler.nextInt());
+										if (produto !=null) {
+											System.out.println("ID: "+ produto.getId());
+											System.out.println("Categoria: "+produto.getCategoria());
+											System.out.println("Descricao: "+produto.getDescricao());
+											System.out.println("Preco: "+produto.getPreco());
+											System.out.println("Peso: "+produto.getPeso());
+											System.out.println("Quantidade: "+produto.getQuantidade());
+											
+										}else {
+											System.out.println("Não foi achado nada ");
+										}
+										break;
 										case 11:
 											do {
 												System.out.println("Quais dados deseja alterar?");
