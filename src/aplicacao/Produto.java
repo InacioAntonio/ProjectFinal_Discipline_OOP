@@ -6,11 +6,22 @@ public class Produto {
 	private float peso;
 	private String categoria;
 	private String descricao;
+	private int Quantidade;
 	
-	public Produto(int id, String categoria, String descricao) {
+	public int getQuantidade() {
+		return Quantidade;
+	}
+
+	public void setQuantidade(int quantidade) {
+		Quantidade = quantidade;
+	}
+
+	public Produto(int id, String categoria, String descricao,int Quantidade,float peso) {
 		this.id = id;
 		this.categoria = categoria;
 		this.descricao = descricao;
+		this.Quantidade = Quantidade;
+		this.peso = peso;
 	}
 	
 	public int getId() {
