@@ -16,14 +16,14 @@ CREATE TABLE IF NOT EXISTS Fazendeiro(
 	telefone TEXT NOT NULL,
 	PRIMARY KEY(cpf)
 );
-CREATE TYPE tipoGenero AS ENUM('masculino', 'feminino');
+
 
 CREATE TABLE IF NOT EXISTS Bode(
 	id SERIAL,
 	nome TEXT DEFAULT 'Bode sem nome',
 	cpf_fazendeiro VARCHAR(14) NOT NULL,
 	peso REAL NOT NULL,
-	genero tipoGenero NOT NULL,
+	genero VARCHAR(20) NOT NULL,
 	PRIMARY KEY (id),
 	CONSTRAINT cpf_fazendeiro FOREIGN KEY (cpf_fazendeiro) REFERENCES Fazendeiro(cpf)
 );
