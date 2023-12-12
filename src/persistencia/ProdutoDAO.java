@@ -32,12 +32,13 @@ public class ProdutoDAO {
 		}
 	}
 	public ArrayList<Produto> Buscar(String Categoria) {
-		ArrayList<Produto> lista = new ArrayList<>();
+		ArrayList<Produto> lista = null;
 		try {
 			con.conectar();
 			PreparedStatement instrucao = con.getConexao().prepareStatement(buscar);
 			instrucao.setString(1, Categoria);
 			ResultSet rs = instrucao.executeQuery();
+			lista = new ArrayList<>();
 			while(rs.next()) {
 				Produto p = new Produto(rs.getInt("id"),rs.getString("categoria"),rs.getString("descricao"),rs.getInt("Quantidade"),rs.getFloat("peso"));
 				lista.add(p);

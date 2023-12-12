@@ -3,13 +3,14 @@ package persistencia;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import aplicacao.*;
 import java.util.ArrayList;
 public class Bode_produtoDAO {
 	private String cadastra = "INSERT INTO Bode_produto (id_bode, id_produto) VALUES (?,?);";
 	private String buscar = "SELECT * FROM Bode_produto WHERE id_bode=?";
 	private String relatorio_geral ="SELECT * FROM relatorio_geral_de_Bodes_Produto";
-	private String relatorio_associados ="SELECT * FROM relatorio_geral_valores";
+	private String relatorio_associados ="SELECT * FROM relatorio_geral_valores  WHERE cpf_fazendeiro = ?";
 	private String deletarProduto = "DELETE FROM Bode_produto WHERE id_produto=?";
 	private String deletarBode = "DELETE FROM Bode_produto WHERE id_bode=?";
 	private String atualizarProduto = "UPDATE Bode_produto SET id_produto=? WHERE id_bode=?";
@@ -20,13 +21,34 @@ public class Bode_produtoDAO {
 		con = new Conexao("postgres","1234","jdbc:postgresql://localhost:5432/BDbode");
 	}
 	
+	public ArrayList<Relatorio_BodeProd> relatorioAssociados(String cpfFazendeiro) {
+		ArrayList<Relatorio_BodeProd> lista = null;
+		
+		try {
+			con.conectar();
+			PreparedStatement instrucao = con.getConexao().prepareStatement(relatorio_associados);
+			instrucao.setString(1,cpfFazendeiro);
+			ResultSet rs = instrucao.executeQuery();
+			lista = new ArrayList<Relatorio_BodeProd>();
+			while(rs.next()) {
+				lista.add(new Relatorio_BodeProd(rs.getFloat("preco"), rs.getFloat("peso"), atualizarBode, atualizarBode, 0, atualizarBode, 0, atualizarBode, atualizarBode));
+			}
+			con.desconectar();
+		}catch(Exception e) {
+			System.out.println(e.toString());
+		}
+		
+		return lista;
+	}
+	
+	
 	public void cadastrar(int id_bode, int id_produto) {
 		try {
 			con.conectar();
 			PreparedStatement instrucao = con.getConexao().prepareStatement(cadastra);
 			instrucao.setInt(1, id_bode);
 			instrucao.setInt(2, id_produto);
-			instrucao.executeQuery();
+			instrucao.execute();
 			con.desconectar();
 		}catch(Exception e) {
 			System.out.println(e.toString());
@@ -103,5 +125,4 @@ public class Bode_produtoDAO {
 			System.out.println(e.toString());
 		}
 	}
-	
 }

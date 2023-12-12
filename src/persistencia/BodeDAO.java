@@ -1,6 +1,7 @@
 package persistencia;
 
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import aplicacao.*;
 import java.util.ArrayList;
@@ -19,6 +20,24 @@ public class BodeDAO {
 	
 	public BodeDAO() {
 		con = new Conexao("postgres","1234","jdbc:postgresql://localhost:5432/BDbode");
+	}
+	
+	public ArrayList<BodeREL> relatorio(){
+		ArrayList<BodeREL> relatorioBode = null;
+		try {
+			con.conectar();
+			Statement instrucao = con.getConexao().createStatement();
+			ResultSet rs = instrucao.executeQuery(relatorio);
+			relatorioBode = new ArrayList<BodeREL>();
+			while(rs.next()) {
+				relatorioBode.add(new BodeREL(rs.getInt("id_bode"), rs.getInt("id_produto"),rs.getString("cpf_fazendeiro"),rs.getInt("id"),rs.getFloat("peso"),rs.getString("nome"),rs.getString("genero")));
+			}
+			con.desconectar();
+		}catch(Exception e) {
+			System.out.println(e.toString());
+		}
+		
+		return relatorioBode;
 	}
 	public void CadastrarBode(Bode b) {
 		Fazendeiro teste = null;

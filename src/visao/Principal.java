@@ -15,10 +15,13 @@ public class Principal {
 			FazendeiroDAO fDAO;
 			BodeDAO bd;
 			ProdutoDAO pd;
+			Bode_produtoDAO bpDAO = new Bode_produtoDAO();
 			Bode bode;
 			Produto produto;
 			ArrayList<Bode> listaBode;
 			ArrayList<Produto> listaProduto;
+			ArrayList<Relatorio_BodeProd> relatorioBodeProduto = new ArrayList<Relatorio_BodeProd>();
+			int bodeEscolha;
 			do {
 				System.out.println("1 - Login");
 				System.out.println("2 - Cadastrar Fazendeiro");
@@ -54,7 +57,8 @@ public class Principal {
 									System.out.println("11 - Atualizar fazendeiro");
 									System.out.println("12 - Deletar Fazendeiro");
 									System.out.println("13 - Visualizar dados");
-									System.out.println("14 - Sair");
+									System.out.println("14 - Relatorio geral dos bodes");
+									System.out.println("15 - Sair");
 									opLogin = ler.nextInt();
 									ler.nextLine();
 									
@@ -130,21 +134,43 @@ public class Principal {
 										}
 										break;
 									case 6:
-										produto = new Produto();
-										System.out.println("Digite a Categoria do Produto");
-										produto.setCategoria(ler.nextLine());
-										System.out.println("Digite o Peso do Produto");
-										produto.setPeso(ler.nextFloat());
-										System.out.println("Digite a Descricao do Produto");
-										ler.nextLine();
-										produto.setDescricao(ler.nextLine());
-										System.out.println("Digite a Quantidade do Produto");
-										produto.setQuantidade(ler.nextInt());
-										System.out.println("Digite o Preco do Produto");
-										ler.nextLine();
-										produto.setPreco(ler.nextFloat());
-										pd = new ProdutoDAO();
-										pd.Cadastrar(produto);
+										bd = new BodeDAO();
+										listaBode = bd.buscar(fazendeiroSessao.getCpf());
+										if (listaBode == null) {
+											System.out.println("Sem Bodes cadastrados");
+										}else {
+											System.out.println("\n");
+											for(int i=0; i < listaBode.size();i++) {
+												System.out.println("ID: "+listaBode.get(i).getId());
+												System.out.println("Nome: "+listaBode.get(i).getNome());
+												System.out.println("Genero: "+listaBode.get(i).getGenero());
+												System.out.println("Peso: "+listaBode.get(i).getPeso());
+											}
+											System.out.println("\n");
+											
+											System.out.println("Digite o numero do bode que deseja cadastrar o produto:");
+											bodeEscolha = ler.nextInt();
+											produto = new Produto();
+											ler.nextLine();
+											System.out.println("Digite a Categoria do Produto");
+											produto.setCategoria(ler.nextLine());
+											System.out.println("Digite o Peso do Produto");
+											produto.setPeso(ler.nextFloat());
+											System.out.println("Digite a Descricao do Produto");
+											ler.nextLine();
+											produto.setDescricao(ler.nextLine());
+											System.out.println("Digite a Quantidade do Produto");
+											produto.setQuantidade(ler.nextInt());
+											System.out.println("Digite o Preco do Produto");
+											ler.nextLine();
+											produto.setPreco(ler.nextFloat());
+											pd = new ProdutoDAO();
+											pd.Cadastrar(produto);
+											listaProduto = pd.Buscar(produto.getCategoria());
+											int ultimoIndice = listaProduto.size()-1;
+											bpDAO.cadastrar(bodeEscolha, listaProduto.get(ultimoIndice).getId());
+											System.out.println("Produto cadastrado com sucesso");
+										}
 										break;
 									case 7:
 										pd = new ProdutoDAO();
@@ -339,6 +365,20 @@ public class Principal {
 											System.out.println("Senha: " + fazendeiro.getSenha());
 											System.out.println("Telefone: " + fazendeiro.getTelefone());
 											System.out.println("Idade: " + fazendeiro.getIdade());
+											break;
+											
+										case 14:
+											bd = new BodeDAO();
+											relatorioBodeProduto = bpDAO.relatorioAssociados();
+											
+											for(int i=0; i < relatorioBodeProduto.size();i++) {
+												System.out.println("Fazendeiro: " + relatorioBodeProduto.get(i).getCpfFazendeiro());
+												System.out.println("Nome do bode" + relatorioBodeProduto.get(i).getNome());
+												System.out.println("Peso:" + relatorioBodeProduto.get(i).getPeso());
+												System.out.println("Genero"+relatorioBodeProduto.get(i).getGenero());
+												System.out.println("Id:"+relatorioBodeProduto.get(i).getId());
+												System.out.println(""+relatorioBodeProduto.get(i).getGenero());
+											}
 											break;
 									}
 									
