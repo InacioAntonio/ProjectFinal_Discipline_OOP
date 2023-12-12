@@ -5,12 +5,12 @@ import aplicacao.*;
 import java.util.ArrayList;
 public class ProdutoDAO {
 	private String inserir ="INSERT INTO Produto(categoria,descricao,preco,peso,quantidade)VALUES(?,?,?,?,?)";
-	private String buscar = "SELECT * FROM WHERE categoria=? ";
-	private String buscarId = "SELECT * FROM WHERE id = ? ";
+	private String buscar = "SELECT * FROM Produto WHERE categoria=? ";
+	private String buscarId = "SELECT * FROM Produto WHERE id = ? ";
 	private String deletar = "DELETE FROM Produto WHERE categoria = ? ";
 	private String deletarId = "DELETE FROM Produto WHERE id=? ";
-	private String atualizar = "UPDATE Produto SET categoria = ? descricao=? preco=? peso=? quantidade=? WHERE categoria = ?";
-	private String atualizarId = "UPDATE Produto SET categoria=? descricao=? preco=? peso=? quantidade=? WHERE id = ?";
+	private String atualizar = "UPDATE Produto SET categoria = ?, descricao=?, preco=?, peso=?, quantidade=? WHERE categoria = ?";
+	private String atualizarId = "UPDATE Produto SET categoria=?, descricao=?, preco=?, peso=?, quantidade=? WHERE id = ?";
 	private Conexao con;
 	public ProdutoDAO() {
 		con = new Conexao("postgres","1234","jdbc:postgresql://localhost:5432/BDbode");

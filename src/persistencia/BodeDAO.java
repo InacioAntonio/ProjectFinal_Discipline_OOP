@@ -51,18 +51,20 @@ public class BodeDAO {
 		float peso;
 		
 		try {
+			con.conectar();
 			PreparedStatement instrucao = con.getConexao().prepareStatement(buscar);
 			instrucao.setString(1, cpf);
 			ResultSet rs = instrucao.executeQuery();
+			bodeBusca = new ArrayList<Bode>();
 			while(rs.next()) {
-				cpfFazendeiro = rs.getString("cpfFazendeiro");
+				cpfFazendeiro = rs.getString("cpf_Fazendeiro");
 				id = rs.getInt("id");
 				peso = rs.getFloat("peso");
 				nome = rs.getString("nome");
 				genero = rs.getString("genero");
-				bodeBusca = new ArrayList<Bode>();
 				bodeBusca.add(new Bode(cpfFazendeiro, id,peso,nome,genero));
 			}
+			con.desconectar();
 		}catch(Exception e) {
 			System.out.println(e.toString());
 		}

@@ -11,7 +11,7 @@ public class Principal {
 			Scanner ler = new Scanner(System.in);
 			Fazendeiro fazendeiro, fBusca, fazendeiroSessao;
 			String cpf, nome, senha, telefone, cpfAtualiza;
-			int idade;
+			int idade, id;
 			FazendeiroDAO fDAO;
 			BodeDAO bd;
 			ProdutoDAO pd;
@@ -79,7 +79,7 @@ public class Principal {
 											System.out.println("Nome: "+listaBode.get(i).getNome());
 											System.out.println("Genero: "+listaBode.get(i).getGenero());
 											System.out.println("Peso: "+listaBode.get(i).getPeso());
-											System.out.println("Cpf_Fazendeiro: "+listaBode.get(i).getPeso());
+											System.out.println("Cpf_Fazendeiro: "+listaBode.get(i).getCpfFazendeiro());
 											
 										}
 										break;
@@ -99,10 +99,35 @@ public class Principal {
 										}
 										break;
 									case 4:
-										
+										System.out.println("Digite o id do bode que deseja alterar:");
+										bd = new BodeDAO();
+										id = ler.nextInt();
+										bode = bd.BuscarId(id);
+										if (bode != null) {
+											System.out.println("Digite as novas informações:");
+											ler.nextLine();
+											System.out.println("Nome: ");
+											bode.setNome(ler.nextLine());
+											System.out.println("Genero: ");
+											bode.setGenero(ler.nextLine());
+											System.out.println("Peso: ");
+											bode.setPeso(ler.nextFloat());
+											bd.atualizar(bode, id);
+										}else {
+											System.out.println("Nada foi encontrado");
+										}
 										break;
 									case 5:
-										
+										System.out.println("Digite o id do bode que deseja deletar:");
+										bd = new BodeDAO();
+										id = ler.nextInt();
+										bode = bd.BuscarId(id);
+										if (bode != null) {
+											bd.deletar(id);
+											System.out.println("Bode deletado");
+										}else {
+											System.out.println("Nada foi encontrado");
+										}
 										break;
 									case 6:
 										produto = new Produto();
@@ -111,10 +136,12 @@ public class Principal {
 										System.out.println("Digite o Peso do Produto");
 										produto.setPeso(ler.nextFloat());
 										System.out.println("Digite a Descricao do Produto");
+										ler.nextLine();
 										produto.setDescricao(ler.nextLine());
 										System.out.println("Digite a Quantidade do Produto");
 										produto.setQuantidade(ler.nextInt());
 										System.out.println("Digite o Preco do Produto");
+										ler.nextLine();
 										produto.setPreco(ler.nextFloat());
 										pd = new ProdutoDAO();
 										pd.Cadastrar(produto);
@@ -147,6 +174,48 @@ public class Principal {
 											System.out.println("Não foi achado nada ");
 										}
 										break;
+										
+										
+										case 9:
+											pd = new ProdutoDAO();
+											System.out.println("Digite o Id do Produto que deseja alterar");
+											id = ler.nextInt();
+											produto = pd.Buscar(id);
+											if (produto !=null) {
+												ler.nextLine();	
+												System.out.println("Digite as novas informações:");
+												System.out.println("Categoria: ");
+												produto.setCategoria(ler.nextLine());
+												System.out.println("Descricao: ");
+												produto.setDescricao(ler.nextLine());
+												System.out.println("Preco: ");
+												produto.setPreco(ler.nextFloat());
+												System.out.println("Peso: ");
+												produto.setPeso(ler.nextFloat());
+												System.out.println("Quantidade: ");
+												produto.setQuantidade(ler.nextInt());
+												pd = new ProdutoDAO();
+												pd.Atualizar(produto);
+												System.out.println("Produto atualizado com sucesso");
+											}else {
+												System.out.println("Não foi achado nada ");
+											}
+										break;
+										
+										case 10:
+											pd = new ProdutoDAO();
+											System.out.println("Digite o Id do Produto que deseja alterar");
+											id = ler.nextInt();
+											produto = pd.Buscar(id);
+											if (produto !=null) {
+												pd = new ProdutoDAO();
+												pd.Deletar(id);
+												System.out.println("Produto deletado com sucesso");
+											}else {
+												System.out.println("Não foi achado nada ");
+											}
+										break;
+										
 										case 11:
 											do {
 												System.out.println("Quais dados deseja alterar?");
