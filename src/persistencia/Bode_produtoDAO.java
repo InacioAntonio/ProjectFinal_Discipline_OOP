@@ -8,6 +8,8 @@ import java.util.ArrayList;
 public class Bode_produtoDAO {
 	private String cadastra = "INSERT INTO Bode_produto (id_bode, id_produto) VALUES (?,?);";
 	private String buscar = "SELECT * FROM Bode_produto WHERE id_bode=?";
+	private String relatorio_geral ="SELECT * FROM relatorio_geral_de_Bodes_Produto";
+	private String relatorio_associados ="SELECT * FROM relatorio_geral_valores";
 	private String deletarProduto = "DELETE FROM Bode_produto WHERE id_produto=?";
 	private String deletarBode = "DELETE FROM Bode_produto WHERE id_bode=?";
 	private String atualizarProduto = "UPDATE Bode_produto SET id_produto=? WHERE id_bode=?";

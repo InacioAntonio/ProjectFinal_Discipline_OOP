@@ -10,7 +10,8 @@ public class BodeDAO {
 	private String vinculaBodes = "UPDATE Bode SET cpf_fazendeiro = ? WHERE cpf_fazendeiro = 0";
 	private String desvinculaBodes = "UPDATE Bode SET cpf_fazendeiro = 0 WHERE cpf_fazendeiro = ?";	
 	private String atualizar = "UPDATE Bode SET cpf_fazendeiro = ?, peso = ?, nome = ?, genero = ?  WHERE id = ?";
-	private String buscar = "SELECT * FROM Bode WHERE cpf_fazendeiro = ?";
+	private String buscar = "SELECT * FROM Bode WHERE cpf_fazendeiro = ?";//Corrigir esse nome para listagem
+	private String relatorio = "SELECT * FROM relatorio_geral_de_Bodes";
 	private String deletar = "DELETE FROM Bode WHERE cpf_fazendeiro=?";
 	private String buscarId = "SELECT * FROM Bode WHERE id = ?";
 	private String deletarId = "DELETE FROM Bode WHERE id= ? ";
@@ -179,4 +180,5 @@ public class BodeDAO {
 			System.out.println(e.toString());
 		}
 	}
+	
 }
