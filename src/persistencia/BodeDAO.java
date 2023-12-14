@@ -30,7 +30,7 @@ public class BodeDAO {
 			ResultSet rs = instrucao.executeQuery(relatorio);
 			relatorioBode = new ArrayList<BodeREL>();
 			while(rs.next()) {
-				relatorioBode.add(new BodeREL(rs.getInt("id_bode"), rs.getInt("id_produto"),rs.getString("cpf_fazendeiro"),rs.getInt("id"),rs.getFloat("peso"),rs.getString("nome"),rs.getString("genero")));
+				relatorioBode.add(new BodeREL(rs.getInt("id_bode"), rs.getInt("id_produto"),rs.getString("cpf_fazendeiro"),rs.getFloat("peso"),rs.getString("nome"),rs.getString("genero")));
 			}
 			con.desconectar();
 		}catch(Exception e) {

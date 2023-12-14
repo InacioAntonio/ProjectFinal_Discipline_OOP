@@ -10,16 +10,17 @@ public class Relatorio_BodeProd extends BodeREL{
 	//Bode
 	private int Id;
 	private String nome;
-
 	
-	public Relatorio_BodeProd(float preco, float pesoProduto, String categoria, int quantidade, int id ) {
-		super();
+	public Relatorio_BodeProd(int id_bode, int id_prod, float preco,float pesoBode, float pesoProduto, String categoria, int quantidade, String nomeBode, String cpfFazendeiro) {	
+		super(id_bode,id_prod, cpfFazendeiro, pesoBode, nomeBode);
 		this.preco = preco;
 		this.pesoProduto = pesoProduto;
 		this.categoria = categoria;
-		this.Id = id;
+		this.Id = id_prod;
 		this.quantidade = quantidade;
+		this.nome = nomeBode;
 	}
+	
 	
 	public int getId() {
 		return Id;

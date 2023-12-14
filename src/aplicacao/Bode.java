@@ -14,6 +14,13 @@ public class Bode {
 		this.nome = nome;
 		this.genero = genero;
 	}
+	
+	public Bode(String cpfFazendeiro, int id, float peso, String nome) {
+		this.cpfFazendeiro = cpfFazendeiro;
+		this.id = id;
+		this.peso = peso;
+		this.nome = nome;
+	}
 	public Bode() {
 		
 	}

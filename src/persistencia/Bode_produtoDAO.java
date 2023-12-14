@@ -27,12 +27,12 @@ public class Bode_produtoDAO {
 		if (teste != null) {
 			try {
 				con.conectar();
-				PreparedStatement instrucao = con.getConexao().prepareStatement(relatorio_associados);
+				PreparedStatement instrucao = con.getConexao().prepareStatement(relatorio_geral);
 				instrucao.setString(1,cpfFazendeiro);
 				ResultSet rs = instrucao.executeQuery();
 				lista = new ArrayList<Relatorio_BodeProd>();
 				while(rs.next()) {
-					lista.add(new Relatorio_BodeProd(rs.getFloat("preco"), rs.getFloat("peso_produto"), rs.getString("categoria"),rs.getInt("quantidade"),rs.getInt("id")));
+					lista.add(new Relatorio_BodeProd(rs.getInt("identificador_bode"),rs.getInt("identificador_produto"),rs.getFloat("preco"),rs.getFloat("pesoBode"), rs.getFloat("pesoProduto"), rs.getString("categoria"),rs.getInt("quantidade"), rs.getString("nomeBode"), rs.getString("cpf_fazendeiro")));
 				}
 				con.desconectar();
 			}catch(Exception e) {
@@ -49,13 +49,13 @@ public class Bode_produtoDAO {
 		Fazendeiro teste = fd.buscar(cpfFazendeiro);
 		if (teste != null) {
 			try {
-			con.conectar();
-			PreparedStatement instrucao = con.getConexao().prepareStatement(relatorio_associados);
-			instrucao.setString(1,cpfFazendeiro);
-			ResultSet rs = instrucao.executeQuery();
-			lista = new ArrayList<Relatorio_BodeProd>();
+				con.conectar();
+				PreparedStatement instrucao = con.getConexao().prepareStatement(relatorio_associados);
+				instrucao.setString(1,cpfFazendeiro);
+				ResultSet rs = instrucao.executeQuery();
+				lista = new ArrayList<Relatorio_BodeProd>();
 			while(rs.next()) {
-				lista.add(new Relatorio_BodeProd(rs.getFloat("preco"), rs.getFloat("peso_produto"), rs.getString("categoria"),rs.getInt("quantidade"),rs.getInt("id")));
+				lista.add(new Relatorio_BodeProd(rs.getInt("identificador_bode"),rs.getInt("identificador_produto"),rs.getFloat("preco"),rs.getFloat("pesoBode"), rs.getFloat("pesoProduto"), rs.getString("categoria"),rs.getInt("quantidade"), rs.getString("nomeBode"), rs.getString("cpf_fazendeiro")));
 			}
 			con.desconectar();
 		}catch(Exception e) {

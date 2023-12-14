@@ -8,8 +8,14 @@ public class BodeREL extends Bode {
 		
 	}
 	
-	public BodeREL(int id_bode,int id_produto,String cpfFazendeiro, int id, float peso, String nome, String genero) {
-		super(cpfFazendeiro, id, peso, nome, genero);
+	public BodeREL(int id_bode,int id_produto,String cpfFazendeiro, float peso, String nome, String genero) {
+		super(cpfFazendeiro, id_bode, peso, nome, genero);
+		this.id_bode = id_bode;
+		this.id_produto = id_produto;
+	}
+	
+	public BodeREL(int id_bode,int id_produto,String cpfFazendeiro, float peso, String nome) {
+		super(cpfFazendeiro, id_bode, peso, nome);
 		this.id_bode = id_bode;
 		this.id_produto = id_produto;
 	}
