@@ -27,7 +27,7 @@ public class Bode_produtoDAO {
 		if (teste != null) {
 			try {
 				con.conectar();
-				PreparedStatement instrucao = con.getConexao().prepareStatement(relatorio_associados);
+				PreparedStatement instrucao = con.getConexao().prepareStatement(relatorio_geral);
 				instrucao.setString(1,cpfFazendeiro);
 				ResultSet rs = instrucao.executeQuery();
 				lista = new ArrayList<Relatorio_BodeProd>();
