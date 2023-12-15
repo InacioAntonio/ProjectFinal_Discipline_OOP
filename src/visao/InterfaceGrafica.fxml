@@ -1,23 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="visao.InterfaceGraficaController">
+   <children>
+      <AnchorPane fx:id="loginScreen" prefHeight="381.0" prefWidth="609.0" visible="false">
          <children>
-            <Label layoutX="208.0" layoutY="173.0" text="cpf">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#aae3ab" height="214.0" layoutX="329.0" layoutY="92.0" stroke="BLACK" strokeType="INSIDE" width="250.0" />
+            <Button layoutX="368.0" layoutY="237.0" mnemonicParsing="false" onAction="#handleBtnLogin" prefHeight="25.0" prefWidth="73.0" style="-fx-background-color: #A3D95B; -fx-cursor: HAND;" text="Login" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <TextField fx:id="cpfInput" layoutX="406.0" layoutY="142.0" />
+            <Label layoutX="343.0" layoutY="184.0" text="Senha">
                <font>
                   <Font name="System Bold" size="19.0" />
                </font>
             </Label>
-            <TextField layoutX="247.0" layoutY="175.0" />
+            <Label layoutX="347.0" layoutY="140.0" text="CPF">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <Button layoutX="450.0" layoutY="237.0" mnemonicParsing="false" onAction="#handleBtnScreenCadastrar" prefHeight="4.0" prefWidth="80.0" style="-fx-background-color: #A3D95B; -fx-cursor: HAND;" text="Cadastrar" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <ImageView fitHeight="398.0" fitWidth="330.0" layoutX="-32.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/bodes.jpeg" />
+               </image>
+            </ImageView>
+            <Label layoutX="372.0" layoutY="36.0" text="Nome do sistema">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="passwdInput" layoutX="406.0" layoutY="187.0" />
          </children>
       </AnchorPane>
-   </center>
-</BorderPane>
+      <AnchorPane fx:id="cadasterScreen" layoutY="-4.0" prefHeight="406.0" prefWidth="600.0" visible="false">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#aae3ab" height="328.0" layoutX="66.0" layoutY="57.0" stroke="BLACK" strokeType="INSIDE" width="501.0" />
+            <TextField fx:id="cpfCadaster" layoutX="286.0" layoutY="89.0" />
+            <TextField fx:id="passwdCadaster" layoutX="286.0" layoutY="136.0" />
+            <TextField fx:id="nameCadaster" layoutX="286.0" layoutY="180.0" />
+            <TextField fx:id="numberCadaster" layoutX="286.0" layoutY="222.0" />
+            <TextField fx:id="ageCadaster" layoutX="286.0" layoutY="272.0" />
+            <Label layoutX="194.0" layoutY="135.0" text="Senha">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <Label layoutX="194.0" layoutY="88.0" text="CPF">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <Label layoutX="194.0" layoutY="179.0" text="Nome">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <Label layoutX="194.0" layoutY="221.0" text="Telefone">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <Label layoutX="196.0" layoutY="271.0" text="Idade">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <Button layoutX="277.0" layoutY="320.0" mnemonicParsing="false" onAction="#handleBtnCadastrar" prefHeight="4.0" prefWidth="80.0" style="-fx-background-color: #A3D95B; -fx-cursor: HAND;" text="Cadastrar" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Label layoutX="222.0" layoutY="14.0" text="Cadastrar Fazendeiro">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="mainScreen" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Button layoutX="508.0" layoutY="346.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="78.0" style="-fx-background-color: #A3D95B; -fx-cursor: HAND;" text="Sair" />
+            <Button layoutX="20.0" layoutY="47.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="93.0" style="-fx-background-color: #A3D95B; -fx-cursor: HAND;" text="Editar Conta" />
+            <Button layoutX="233.0" layoutY="47.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="100.0" style="-fx-background-color: #A3D95B; -fx-cursor: HAND;" text="Cadastrar Bode" />
+            <Button layoutX="135.0" layoutY="47.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="80.0" style="-fx-background-color: #A3D95B; -fx-cursor: HAND;" text="Editar Bode" />
+            <Button layoutX="351.0" layoutY="47.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="114.0" style="-fx-background-color: #A3D95B; -fx-cursor: HAND;" text="Cadastrar Produto" />
+            <Button layoutX="478.0" layoutY="47.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="114.0" style="-fx-background-color: #A3D95B; -fx-cursor: HAND;" text="Editar Produto" />
+            <TableView fx:id="relatorioGeralJfx" layoutX="67.0" layoutY="116.0" prefHeight="200.0" prefWidth="501.0">
+               <columns>
+                  <TableColumn fx:id="nomeBodeJfx" prefWidth="88.0" text="Nome_Bode" />
+                  <TableColumn fx:id="pesoProdutoJfx" prefWidth="86.0" text="PesoProduto" />
+                  <TableColumn fx:id="precoJfx" prefWidth="62.0" text="Preco" />
+                  <TableColumn fx:id="qtdJfx" prefWidth="75.0" text="Quantidade" />
+                  <TableColumn fx:id="pesoBodeJfx" text="PesoBode" />
+                  <TableColumn fx:id="categoriaJfx" prefWidth="109.0" text="Categoria" />
+               </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
