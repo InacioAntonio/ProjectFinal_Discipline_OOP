@@ -16,12 +16,12 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/vitin/Documents/TADS/Java/ProjectFinal_Discipline_OOP/libraries/postgresql-42.6.0.jar">
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX">
+	<classpathentry kind="lib" path="C:/Users/Inaci/Downloads/postgresql-42.6.0.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

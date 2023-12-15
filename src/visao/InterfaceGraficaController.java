@@ -12,29 +12,33 @@ import aplicacao.Relatorio_BodeProd;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import persistencia.BodeDAO;
 import persistencia.Bode_produtoDAO;
 import persistencia.FazendeiroDAO;
 import persistencia.ProdutoDAO;
 
-public class InterfaceGraficaController {
+public class InterfaceGraficaController implements Initializable{
 	Fazendeiro fazendeiro, fBusca, fazendeiroSessao;
 	FazendeiroDAO fDAO;
 	BodeDAO bd;
 	ProdutoDAO pd;
-	Bode_produtoDAO bpDAO = new Bode_produtoDAO();
+	private Bode_produtoDAO bpDAO = new Bode_produtoDAO();
 	Bode bode;
 	Produto produto;
 	ArrayList<Bode> listaBode;
 	ArrayList<Produto> listaProduto;
-	ArrayList<Relatorio_BodeProd> relatorioBodeProduto = new ArrayList<Relatorio_BodeProd>();
+	private ObservableList<Relatorio_BodeProd> relatorioBodeProduto = FXCollections.observableArrayList();
 	String cpf, nome, senha, telefone, cpfAtualiza;
 	int idade;
 	
@@ -70,42 +74,73 @@ public class InterfaceGraficaController {
 
     @FXML
     private PasswordField passwdInput;
-
-    @FXML
-    private TableColumn<?, ?> categoriaJfx;
-
-    @FXML
-    private TableColumn<?, ?> idBodeJfx;
-
-    @FXML
-    private TableColumn<?, ?> idProdutoJfx;
     
     @FXML
-    private TableColumn<?, ?> nomeBodeJfx;
+    private AnchorPane cadasterBodeScreen;
+
+    @FXML
+    private ToggleGroup genero;
+   
+    @FXML
+    private TextField nameBodeCad;
     
     @FXML
-    private TableColumn<?, ?> pesoBodeJfx;
+    private TextField pesoBodeCad;
+    
+    @FXML
+    private RadioButton femeaCad;
 
     @FXML
-    private TableColumn<?, ?> pesoProdutoJfx;
+    private TableColumn<Relatorio_BodeProd, String> categoriaJfx;
 
     @FXML
-    private TableColumn<?, ?> precoJfx;
+    private TableColumn<Relatorio_BodeProd, Double> idBodeJfx;
 
     @FXML
-    private TableColumn<?, ?> qtdJfx;
+    private TableColumn<Relatorio_BodeProd, Double> idProdutoJfx;
+    
+    @FXML
+    private TableColumn<Relatorio_BodeProd, String> nomeBodeJfx;
+    
+    @FXML
+    private TableColumn<Relatorio_BodeProd, Double> pesoBodeJfx;
 
     @FXML
-    private TableView<?> relatorioGeralJfx;
+    private TableColumn<Relatorio_BodeProd, Double> pesoProdutoJfx;
+
+    @FXML
+    private TableColumn<Relatorio_BodeProd, Double> precoJfx;
+
+    @FXML
+    private TableColumn<Relatorio_BodeProd, Integer> qtdJfx;
+
+    @FXML
+    private TableView<Relatorio_BodeProd> relatorioGeralJfx;
     
     Alert alert;
-	
-	public void initialize() {
-        // TODO
+    
+    @Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// TODO Auto-generated method stub@FXML
     	loginScreen.setVisible(true);
     	cadasterScreen.setVisible(false);
     	mainScreen.setVisible(false);
-    }    
+    	cadasterBodeScreen.setVisible(false);
+	}
+    
+    private void intializeRelatorioGeral() {
+    	categoriaJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("Categoria"));
+        //idBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Integer>("PesoProduto"));
+        //idProdutoJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Integer>("Preco"));;
+        nomeBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("Nome_Bode"));;
+        pesoBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Double>("PesoBode"));;
+        pesoProdutoJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Double>("PesoProduto"));;
+        precoJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Double>("Preco"));;
+        qtdJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Integer>("Quantidade"));;
+        
+        relatorioBodeProduto.addAll(bpDAO.relatorioGeral(fazendeiroSessao.getCpf()));
+        relatorioGeralJfx.setItems(relatorioBodeProduto);
+    }
     
     @FXML
 	private void handleBtnLogin(){
@@ -116,9 +151,10 @@ public class InterfaceGraficaController {
 		fDAO = new FazendeiroDAO();
 		try {
 			fBusca = fDAO.buscar(cpf);
-			if(fBusca != null) {
+			if(fBusca != null) {	
 				if(fBusca.getSenha().equals(senha)) {
 					fazendeiroSessao = fBusca;
+					intializeRelatorioGeral();
 			    	loginScreen.setVisible(false);
 			    	mainScreen.setVisible(true);
 				}
@@ -154,4 +190,27 @@ public class InterfaceGraficaController {
 			Alerts.notCadaster();
 		}
     }
+
+    @FXML
+    private void handleNavigationBodeCad() {
+    	mainScreen.setVisible(false);
+    	cadasterBodeScreen.setVisible(true);
+    }
+    
+    @FXML
+    private void handleBtnCadasterBode() {
+    	
+    	try {
+			bode = new Bode();
+			bd  = new BodeDAO();
+			bode.setCpfFazendeiro(fazendeiroSessao.getCpf());
+			bode.setNome(nameBodeCad.getText());
+			bode.setGenero(femeaCad.isSelected() ? "Macho" : "Fêmea");
+			bode.setPeso(Float.parseFloat(pesoBodeCad.getText()));
+			bd.CadastrarBode(bode);
+			Alerts.cadasterBode();
+    	}catch(Exception e) {
+			Alerts.notCadasterBode();
+    	}
+	}
 }
