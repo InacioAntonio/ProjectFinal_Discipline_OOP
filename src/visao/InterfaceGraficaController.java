@@ -29,13 +29,13 @@ import persistencia.FazendeiroDAO;
 import persistencia.ProdutoDAO;
 
 public class InterfaceGraficaController implements Initializable{
-	Fazendeiro fazendeiro, fBusca, fazendeiroSessao;
-	FazendeiroDAO fDAO;
-	BodeDAO bd;
-	ProdutoDAO pd;
+	private Fazendeiro fazendeiro, fBusca, fazendeiroSessao;
+	private FazendeiroDAO fDAO;
+	private BodeDAO bd;
+	private ProdutoDAO pd;
 	private Bode_produtoDAO bpDAO = new Bode_produtoDAO();
-	Bode bode;
-	Produto produto;
+	private Bode bode;
+	private Produto produto;
 	ArrayList<Bode> listaBode;
 	ArrayList<Produto> listaProduto;
 	private ObservableList<Relatorio_BodeProd> relatorioBodeProduto = FXCollections.observableArrayList();
@@ -45,7 +45,7 @@ public class InterfaceGraficaController implements Initializable{
 	private int idade;
 	private int bodeEscolha;
 	private ObservableList<Bode> bodes = FXCollections.observableArrayList();
-	private ObservableList<Produto> produtos = FXCollections.observableArrayList();
+	private ObservableList<Relatorio_BodeProd> produtos = FXCollections.observableArrayList();
 
     @FXML
     private TextField ageCadaster;
@@ -70,6 +70,9 @@ public class InterfaceGraficaController implements Initializable{
 
     @FXML
     private AnchorPane mainScreen;
+    
+    @FXML
+    private AnchorPane  editProdutoScreen;
 
     @FXML
     private TextField nameCadaster;
@@ -117,8 +120,29 @@ public class InterfaceGraficaController implements Initializable{
     private TextField precoProdCad;
     
     @FXML
+    private TextField categoriaProdEdit;
+    
+    @FXML
+    private TextField pesoProdEdit;
+    
+    @FXML
+    private TextField descricaoProdEdit;
+    
+    @FXML
+    private TextField precoProdEdit;
+    
+    @FXML
+    private TextField idProdEdit;
+    
+    @FXML
+    private TextField qtdProdEdit;
+    
+    @FXML
     private RadioButton femeaCad;
 
+    @FXML
+    private RadioButton machoCad;
+    
     @FXML
     private TableColumn<Relatorio_BodeProd, String> categoriaJfx;
 
@@ -157,6 +181,15 @@ public class InterfaceGraficaController implements Initializable{
     
     @FXML
     private TableColumn<Relatorio_BodeProd, Float> pesoProdutoRel;
+    
+    @FXML
+    private TableColumn<Relatorio_BodeProd, Integer> idProdutoTabela;
+    
+    @FXML
+    private TableColumn<Relatorio_BodeProd, String> categoriaProdTabela;
+    
+    @FXML
+    private TableColumn<Relatorio_BodeProd, String> descricaoProdTabela;
 
     @FXML
     private TableColumn<Bode, Integer> idBodeTable;
@@ -177,6 +210,9 @@ public class InterfaceGraficaController implements Initializable{
     private TableView<Relatorio_BodeProd> tabelaBodes;
     
     @FXML
+    private TableView<Relatorio_BodeProd> tabelaEditProduto;
+    
+    @FXML
     private TableView<Bode>  tabelaBodesBusca;
     
     Alert alert;
@@ -190,6 +226,7 @@ public class InterfaceGraficaController implements Initializable{
     	cadasterBodeScreen.setVisible(false);
     	relatorioBodeScreen.setVisible(false);
     	cadasterProdutoScreen.setVisible(false);
+    	editProdutoScreen.setVisible(false);
 	}
     
     private void intializeRelatorioGeral() {
@@ -222,6 +259,8 @@ public class InterfaceGraficaController implements Initializable{
 					intializeRelatorioGeral();
 			    	loginScreen.setVisible(false);
 			    	mainScreen.setVisible(true);
+			    	cpfInput.setText("");
+			    	passwdInput.setText("");
 				}
 			}
 		}catch(Exception e) {
@@ -229,6 +268,12 @@ public class InterfaceGraficaController implements Initializable{
 		}
 	}
     
+    @FXML
+    private void handleBtnSair() {
+    	fazendeiroSessao = null;
+    	mainScreen.setVisible(false);
+    	loginScreen.setVisible(true);
+    }
 
     @FXML
 	private void handleBtnScreenCadastrar(){
@@ -249,6 +294,10 @@ public class InterfaceGraficaController implements Initializable{
 			fazendeiro = new Fazendeiro(nome, cpf, senha, idade, telefone);
 			fDAO.cadastrar(fazendeiro);
 			Alerts.cadaster();
+			nameCadaster.setText("");
+			ageCadaster.setText("");
+			numberCadaster.setText("");
+			passwdCadaster.setText("");
 			loginScreen.setVisible(true);
 	    	cadasterScreen.setVisible(false);
 		}else {
@@ -275,6 +324,11 @@ public class InterfaceGraficaController implements Initializable{
 			bode.setPeso(Float.parseFloat(pesoBodeCad.getText()));
 			bd.CadastrarBode(bode);
 			Alerts.cadasterBode();
+
+			femeaCad.setSelected(false);
+			machoCad.setSelected(false);
+			nameBodeCad.setText("");
+			pesoBodeCad.setText("");
 	    	mainScreen.setVisible(true);
 	    	cadasterBodeScreen.setVisible(false);
     	}catch(Exception e) {
@@ -305,14 +359,17 @@ public class InterfaceGraficaController implements Initializable{
     	intializeRelatorioGeral();
     }
     
-    private void BuscarBode() {		
+    private void BuscarBode() {	
+    	tabelaBodes.getItems().clear();	
     	nomeBodeRel.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("nome"));
     	pesoProdutoRel.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Float>("pesoProduto"));
     	categoriaProdRel.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("categoria"));
     	pesoBodeRel.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Float>("peso"));
         precoProdutoRel.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Float>("preco"));
 
-    	tabelaBodes.getItems().clear();
+        bpDAO = new Bode_produtoDAO();
+        relatorioBodes.addAll(bpDAO.relatorioGeral(fazendeiroSessao.getCpf()));
+        
     	tabelaBodes.setItems(relatorioBodes);
     }
 
@@ -333,6 +390,7 @@ public class InterfaceGraficaController implements Initializable{
 			produto.setDescricao(descricaoProdCad.getText());
 			produto.setQuantidade(Integer.parseInt(qtdProdCad.getText()));
 			produto.setPreco(Float.parseFloat(precoProdCad.getText()));
+						
 			bd = new BodeDAO();
 			bode = bd.BuscarId(bodeEscolha);
 			if(bode !=null) {
@@ -341,7 +399,15 @@ public class InterfaceGraficaController implements Initializable{
 				listaProduto = pd.Buscar(produto.getCategoria());
 				int ultimoIndice = listaProduto.size()-1;
 				bpDAO.cadastrar(bodeEscolha, listaProduto.get(ultimoIndice).getId());
+				
 				Alerts.cadasterProd();
+				idBodeProdCad.setText("");
+				pesoProdCad.setText("");
+				categoriaProdCad.setText("");
+				descricaoProdCad.setText("");
+				qtdProdCad.setText("");
+				precoProdCad.setText("");
+				handleBtnVoltarCadProd();
 			}else {
 				Alerts.notCadasterProd();
 			}
@@ -362,9 +428,42 @@ public class InterfaceGraficaController implements Initializable{
     	bodes.addAll(bd.buscar(fazendeiroSessao.getCpf()));
     	tabelaBodesBusca.setItems(bodes);
     }
+    
     @FXML
     private void handleBtnVoltarCadProd(){
     	mainScreen.setVisible(true);
     	cadasterProdutoScreen.setVisible(false);
+    	intializeRelatorioGeral();
+    }
+    
+    @FXML
+    private void handleNavigationEditProd(){
+    	mainScreen.setVisible(false);
+    	editProdutoScreen.setVisible(true);
+    	initializeProductTable();
+    }
+    
+    private void initializeProductTable() {
+    	idProdutoTabela.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Integer>("id"));
+    	categoriaProdTabela.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("categoria"));
+        descricaoProdTabela.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("descricao"));
+        
+        bpDAO = new Bode_produtoDAO();
+        
+        tabelaEditProduto.getItems().clear();
+        produtos.addAll(bpDAO.relatorioGeral(fazendeiroSessao.getCpf()));
+        tabelaEditProduto.setItems(produtos);
+    }
+    
+    @FXML
+    private void handleVoltarEditProd() {
+    	mainScreen.setVisible(true);
+    	editProdutoScreen.setVisible(false);
+    	intializeRelatorioGeral();
+    }
+
+    @FXML
+    private void handleSelectionarProd() {
+    	
     }
 }

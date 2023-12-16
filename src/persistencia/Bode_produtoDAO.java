@@ -32,7 +32,7 @@ public class Bode_produtoDAO {
 				ResultSet rs = instrucao.executeQuery();
 				lista = new ArrayList<Relatorio_BodeProd>();
 				while(rs.next()) {
-					lista.add(new Relatorio_BodeProd(rs.getInt("identificador_bode"),rs.getInt("identificador_produto"),rs.getFloat("preco"),rs.getFloat("pesoBode"), rs.getFloat("pesoProduto"), rs.getString("categoria"),rs.getInt("quantidade"), rs.getString("nomeBode"), rs.getString("cpf_fazendeiro")));
+					lista.add(new Relatorio_BodeProd(rs.getInt("identificador_bode"),rs.getInt("identificador_produto"),rs.getFloat("preco"),rs.getFloat("pesoBode"), rs.getFloat("pesoProduto"), rs.getString("categoria"),rs.getInt("quantidade"), rs.getString("nomeBode"), rs.getString("cpf_fazendeiro"), rs.getString("descricao")));
 				}
 				con.desconectar();
 			}catch(Exception e) {

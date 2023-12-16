@@ -58,7 +58,7 @@ select * from bode b full join bode_produto pb on b.id = id_bode;
 
 CREATE VIEW relatorio_geral_de_Bodes_Produto AS
 SELECT   b.nome AS nomeBode,b.id AS identificador_bode,p.id AS identificador_produto,
-p.categoria,p.preco,p.peso AS pesoProduto,p.quantidade, b.peso AS pesoBode, b.cpf_fazendeiro 
+p.categoria,p.preco,p.peso AS pesoProduto,p.quantidade, b.peso AS pesoBode, b.cpf_fazendeiro, p.descricao
 FROM bode_produto AS  bp
 FULL JOIN bode b ON bp.id_bode = b.id
 FULL JOIN produto p ON bp.id_produto = p.id;
