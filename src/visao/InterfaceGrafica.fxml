@@ -185,16 +185,68 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="cadasterBode" prefHeight="406.0" prefWidth="600.0">
+      <AnchorPane fx:id="cadasterProdutoScreen" prefHeight="406.0" prefWidth="600.0">
          <children>
-            <TableView fx:id="tabelaBodes1" layoutX="160.0" layoutY="91.0" prefHeight="200.0" prefWidth="240.0">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#aae3ab" height="356.0" layoutX="8.0" layoutY="18.0" stroke="BLACK" strokeType="INSIDE" width="580.0" />
+            <TableView fx:id="tabelaBodesBusca" layoutX="23.0" layoutY="80.0" prefHeight="214.0" prefWidth="265.0">
                <columns>
-                  <TableColumn fx:id="nomeBodeRel" prefWidth="48.0" text="ID" />
-                  <TableColumn fx:id="pesoProdutoRel1" prefWidth="71.0" text="NomeBode" />
-                  <TableColumn fx:id="categoriaProdRel1" prefWidth="57.0" text="Genero" />
-                  <TableColumn fx:id="pesoBodeRel1" prefWidth="65.0" text="PesoBode" />
+                  <TableColumn fx:id="idBodeTable" prefWidth="48.0" text="ID" />
+                  <TableColumn fx:id="nomeBodeTable" prefWidth="79.0" text="NomeBode" />
+                  <TableColumn fx:id="generoBodeTable" prefWidth="49.0" text="Genero" />
+                  <TableColumn fx:id="pesoBodeTable" prefWidth="87.0" text="PesoBode" />
                </columns>
             </TableView>
+            <Label layoutX="218.0" layoutY="26.0" text="Cadastrar Produto">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <Label layoutX="303.0" layoutY="75.0" text="Id do Bode">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <TextField fx:id="idBodeProdCad" layoutX="416.0" layoutY="78.0" />
+            <Label layoutX="303.0" layoutY="114.0" text="Categoria">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <TextField fx:id="categoriaProdCad" layoutX="416.0" layoutY="115.0" />
+            <Label layoutX="303.0" layoutY="150.0" text="Peso">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <TextField fx:id="pesoProdCad" layoutX="416.0" layoutY="152.0" />
+            <Label layoutX="304.0" layoutY="189.0" text="Descricao">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <TextField fx:id="descricaoProdCad" layoutX="416.0" layoutY="189.0" />
+            <TextField fx:id="qtdProdCad" layoutX="416.0" layoutY="225.0" />
+            <Label layoutX="303.0" layoutY="224.0" text="Quantidade">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <Label layoutX="304.0" layoutY="265.0" text="Preco">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <TextField fx:id="precoProdCad" layoutX="416.0" layoutY="263.0" />
+            <Button layoutX="472.0" layoutY="316.0" mnemonicParsing="false" onAction="#handleBtnVoltarCadProd" prefHeight="34.0" prefWidth="93.0" style="-fx-background-color: #A3D95B; -fx-cursor: HAND;" text="Voltar">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button layoutX="370.0" layoutY="316.0" mnemonicParsing="false" onAction="#handleCadProduto" prefHeight="34.0" prefWidth="93.0" style="-fx-background-color: #A3D95B; -fx-cursor: HAND;" text="Cadastrar">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
    </children>

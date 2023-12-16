@@ -41,9 +41,9 @@ public class InterfaceGraficaController implements Initializable{
 	private ObservableList<Relatorio_BodeProd> relatorioBodeProduto = FXCollections.observableArrayList();
 	private ObservableList<Relatorio_BodeProd> relatorioBodes = FXCollections.observableArrayList();
 	
-	String cpf, nome, senha, telefone, cpfAtualiza;
-	int idade;
-	
+	private String cpf, nome, senha, telefone, cpfAtualiza;
+	private int idade;
+	private int bodeEscolha;
 	private ObservableList<Bode> bodes = FXCollections.observableArrayList();
 	private ObservableList<Produto> produtos = FXCollections.observableArrayList();
 
@@ -52,6 +52,9 @@ public class InterfaceGraficaController implements Initializable{
 
     @FXML
     private AnchorPane cadasterScreen;
+    
+    @FXML
+    private AnchorPane cadasterProdutoScreen;
 
     @FXML
     private TextField cpfCadaster;
@@ -96,6 +99,24 @@ public class InterfaceGraficaController implements Initializable{
     private TextField buscarBodeText;
     
     @FXML
+    private TextField idBodeProdCad;
+    
+    @FXML
+    private TextField categoriaProdCad;
+    
+    @FXML
+    private TextField pesoProdCad;
+    
+    @FXML
+    private TextField descricaoProdCad;
+    
+    @FXML
+    private TextField qtdProdCad;
+    
+    @FXML
+    private TextField precoProdCad;
+    
+    @FXML
     private RadioButton femeaCad;
 
     @FXML
@@ -136,12 +157,27 @@ public class InterfaceGraficaController implements Initializable{
     
     @FXML
     private TableColumn<Relatorio_BodeProd, Float> pesoProdutoRel;
+
+    @FXML
+    private TableColumn<Bode, Integer> idBodeTable;
+    
+    @FXML
+    private TableColumn<Bode, String> nomeBodeTable;
+    
+    @FXML
+    private TableColumn<Bode, String> generoBodeTable;
+    
+    @FXML
+    private TableColumn<Bode, Float> pesoBodeTable;
     
     @FXML
     private TableView<Relatorio_BodeProd> relatorioGeralJfx;
     
     @FXML
     private TableView<Relatorio_BodeProd> tabelaBodes;
+    
+    @FXML
+    private TableView<Bode>  tabelaBodesBusca;
     
     Alert alert;
     
@@ -153,6 +189,7 @@ public class InterfaceGraficaController implements Initializable{
     	mainScreen.setVisible(false);
     	cadasterBodeScreen.setVisible(false);
     	relatorioBodeScreen.setVisible(false);
+    	cadasterProdutoScreen.setVisible(false);
 	}
     
     private void intializeRelatorioGeral() {
@@ -281,11 +318,53 @@ public class InterfaceGraficaController implements Initializable{
 
     @FXML
     private void handleNavigationCadProd(){
-    	
+    	mainScreen.setVisible(false);
+    	cadasterProdutoScreen.setVisible(true);
+    	initializeTableBode();
     }
     
     @FXML
     private void handleCadProduto(){
-    	
+    	try {
+	    	bodeEscolha = Integer.parseInt(idBodeProdCad.getText());
+			produto = new Produto();
+			produto.setCategoria(categoriaProdCad.getText());
+			produto.setPeso(Float.parseFloat(pesoProdCad.getText()));
+			produto.setDescricao(descricaoProdCad.getText());
+			produto.setQuantidade(Integer.parseInt(qtdProdCad.getText()));
+			produto.setPreco(Float.parseFloat(precoProdCad.getText()));
+			bd = new BodeDAO();
+			bode = bd.BuscarId(bodeEscolha);
+			if(bode !=null) {
+				pd = new ProdutoDAO();
+				pd.Cadastrar(produto);
+				listaProduto = pd.Buscar(produto.getCategoria());
+				int ultimoIndice = listaProduto.size()-1;
+				bpDAO.cadastrar(bodeEscolha, listaProduto.get(ultimoIndice).getId());
+				Alerts.cadasterProd();
+			}else {
+				Alerts.notCadasterProd();
+			}
+    	}catch(Exception e) {
+    		System.out.println(e.toString());
+    	}
+		
+    }
+
+    private void initializeTableBode() {
+    	bd = new BodeDAO();
+    	idBodeTable.setCellValueFactory(new PropertyValueFactory<Bode, Integer>("id"));
+        nomeBodeTable.setCellValueFactory(new PropertyValueFactory<Bode, String>("nome"));
+        generoBodeTable.setCellValueFactory(new PropertyValueFactory<Bode, String>("genero"));
+        pesoBodeTable.setCellValueFactory(new PropertyValueFactory<Bode, Float>("peso"));
+
+    	tabelaBodesBusca.getItems().clear();
+    	bodes.addAll(bd.buscar(fazendeiroSessao.getCpf()));
+    	tabelaBodesBusca.setItems(bodes);
+    }
+    @FXML
+    private void handleBtnVoltarCadProd(){
+    	mainScreen.setVisible(true);
+    	cadasterProdutoScreen.setVisible(false);
     }
 }

@@ -44,5 +44,21 @@ public abstract class Alerts {
 		 alert.setContentText("Não foi possível cadastrar este bode");
 		 alert.showAndWait();
 	}
+
+	public static void cadasterProd() {
+		 Alert alert = new Alert(AlertType.INFORMATION);
+		 alert.setTitle("Cadastro produto");
+		 alert.setHeaderText("Produto cadastrado");
+		 alert.setContentText("Porduto cadastrado com sucesso");
+		 alert.showAndWait();
+	}
+	
+	public static void notCadasterProd() {
+		 Alert alert = new Alert(AlertType.INFORMATION);
+		 alert.setTitle("Cadastro produto");
+		 alert.setHeaderText("Produto não foi cadastrado");
+		 alert.setContentText("Não foi possível cadastrar este produto");
+		 alert.showAndWait();
+	}
 	
 }
