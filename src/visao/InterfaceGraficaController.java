@@ -39,6 +39,8 @@ public class InterfaceGraficaController implements Initializable{
 	ArrayList<Bode> listaBode;
 	ArrayList<Produto> listaProduto;
 	private ObservableList<Relatorio_BodeProd> relatorioBodeProduto = FXCollections.observableArrayList();
+	private ObservableList<Relatorio_BodeProd> relatorioBodes = FXCollections.observableArrayList();
+	
 	String cpf, nome, senha, telefone, cpfAtualiza;
 	int idade;
 	
@@ -59,6 +61,9 @@ public class InterfaceGraficaController implements Initializable{
 
     @FXML
     private AnchorPane loginScreen;
+    
+    @FXML
+    private AnchorPane relatorioBodeScreen;
 
     @FXML
     private AnchorPane mainScreen;
@@ -86,6 +91,9 @@ public class InterfaceGraficaController implements Initializable{
     
     @FXML
     private TextField pesoBodeCad;
+
+    @FXML
+    private TextField buscarBodeText;
     
     @FXML
     private RadioButton femeaCad;
@@ -94,28 +102,46 @@ public class InterfaceGraficaController implements Initializable{
     private TableColumn<Relatorio_BodeProd, String> categoriaJfx;
 
     @FXML
-    private TableColumn<Relatorio_BodeProd, Double> idBodeJfx;
+    private TableColumn<Relatorio_BodeProd, Float> idBodeJfx;
 
     @FXML
-    private TableColumn<Relatorio_BodeProd, Double> idProdutoJfx;
+    private TableColumn<Relatorio_BodeProd, Float> idProdutoJfx;
     
     @FXML
     private TableColumn<Relatorio_BodeProd, String> nomeBodeJfx;
     
     @FXML
-    private TableColumn<Relatorio_BodeProd, Double> pesoBodeJfx;
+    private TableColumn<Relatorio_BodeProd, Float> pesoBodeJfx;
 
     @FXML
-    private TableColumn<Relatorio_BodeProd, Double> pesoProdutoJfx;
+    private TableColumn<Relatorio_BodeProd, Float> pesoProdutoJfx;
 
     @FXML
-    private TableColumn<Relatorio_BodeProd, Double> precoJfx;
+    private TableColumn<Relatorio_BodeProd, Float> precoJfx;
 
     @FXML
     private TableColumn<Relatorio_BodeProd, Integer> qtdJfx;
+    
+    @FXML
+    private TableColumn<Relatorio_BodeProd, String> nomeBodeRel;
 
     @FXML
+    private TableColumn<Relatorio_BodeProd, String> categoriaProdRel;
+
+    @FXML
+    private TableColumn<Relatorio_BodeProd, Float> pesoBodeRel;
+   
+    @FXML
+    private TableColumn<Relatorio_BodeProd, Float> precoProdutoRel;
+    
+    @FXML
+    private TableColumn<Relatorio_BodeProd, Float> pesoProdutoRel;
+    
+    @FXML
     private TableView<Relatorio_BodeProd> relatorioGeralJfx;
+    
+    @FXML
+    private TableView<Relatorio_BodeProd> tabelaBodes;
     
     Alert alert;
     
@@ -126,18 +152,20 @@ public class InterfaceGraficaController implements Initializable{
     	cadasterScreen.setVisible(false);
     	mainScreen.setVisible(false);
     	cadasterBodeScreen.setVisible(false);
+    	relatorioBodeScreen.setVisible(false);
 	}
     
     private void intializeRelatorioGeral() {
-    	categoriaJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("Categoria"));
+    	categoriaJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("categoria"));
         //idBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Integer>("PesoProduto"));
         //idProdutoJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Integer>("Preco"));;
-        nomeBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("Nome_Bode"));;
-        pesoBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Double>("PesoBode"));;
-        pesoProdutoJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Double>("PesoProduto"));;
-        precoJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Double>("Preco"));;
-        qtdJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Integer>("Quantidade"));;
+        nomeBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("nome"));;
+        pesoBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Float>("peso"));;
+        pesoProdutoJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Float>("pesoProduto"));;
+        precoJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Float>("preco"));;
+        qtdJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Integer>("quantidade"));;
         
+        relatorioGeralJfx.getItems().clear();
         relatorioBodeProduto.addAll(bpDAO.relatorioGeral(fazendeiroSessao.getCpf()));
         relatorioGeralJfx.setItems(relatorioBodeProduto);
     }
@@ -160,7 +188,7 @@ public class InterfaceGraficaController implements Initializable{
 				}
 			}
 		}catch(Exception e) {
-			alert =  new Alert(AlertType.CONFIRMATION);
+			Alerts.notLogin();
 		}
 	}
     
@@ -195,6 +223,7 @@ public class InterfaceGraficaController implements Initializable{
     private void handleNavigationBodeCad() {
     	mainScreen.setVisible(false);
     	cadasterBodeScreen.setVisible(true);
+    	intializeRelatorioGeral();
     }
     
     @FXML
@@ -209,8 +238,54 @@ public class InterfaceGraficaController implements Initializable{
 			bode.setPeso(Float.parseFloat(pesoBodeCad.getText()));
 			bd.CadastrarBode(bode);
 			Alerts.cadasterBode();
+	    	mainScreen.setVisible(true);
+	    	cadasterBodeScreen.setVisible(false);
     	}catch(Exception e) {
 			Alerts.notCadasterBode();
     	}
+
+    	intializeRelatorioGeral();
 	}
+
+    @FXML
+    private void handleBtnVoltarBode() {
+    	mainScreen.setVisible(true);
+    	cadasterBodeScreen.setVisible(false);
+    	intializeRelatorioGeral();
+    }
+    
+    @FXML
+    private void handleRelatorioBode() {
+    	mainScreen.setVisible(false);
+    	relatorioBodeScreen.setVisible(true);
+    	BuscarBode();
+    }
+    
+    @FXML
+    private void handleBtnVoltarRelatorio() {
+    	mainScreen.setVisible(true);
+    	relatorioBodeScreen.setVisible(false);
+    	intializeRelatorioGeral();
+    }
+    
+    private void BuscarBode() {		
+    	nomeBodeRel.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("nome"));
+    	pesoProdutoRel.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Float>("pesoProduto"));
+    	categoriaProdRel.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("categoria"));
+    	pesoBodeRel.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Float>("peso"));
+        precoProdutoRel.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Float>("preco"));
+
+    	tabelaBodes.getItems().clear();
+    	tabelaBodes.setItems(relatorioBodes);
+    }
+
+    @FXML
+    private void handleNavigationCadProd(){
+    	
+    }
+    
+    @FXML
+    private void handleCadProduto(){
+    	
+    }
 }

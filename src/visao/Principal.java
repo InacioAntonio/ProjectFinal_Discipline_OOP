@@ -369,7 +369,6 @@ public class Principal {
 											break;
 											
 										case 14:
-											bd = new BodeDAO();
 											relatorioBodeProduto = bpDAO.relatorioAssociados(fazendeiroSessao.getCpf());
 											
 											for(int i=0; i < relatorioBodeProduto.size();i++) {
