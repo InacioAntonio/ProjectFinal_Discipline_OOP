@@ -8,6 +8,7 @@ public class Produto {
 	private String descricao;
 	private int Quantidade;
 	private String Cpf_fazendeiro;
+	
 	public String getCpf_fazendeiro() {
 		return Cpf_fazendeiro;
 	}

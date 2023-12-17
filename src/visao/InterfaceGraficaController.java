@@ -46,6 +46,7 @@ public class InterfaceGraficaController implements Initializable{
 	private String cpf, nome, senha, telefone, cpfAtualiza;
 	private int idade;
 	private int bodeEscolha;
+	private int ultimoIndice;
 	private ObservableList<Bode> bodes = FXCollections.observableArrayList();
 	private ObservableList<Bode> bodesEdit = FXCollections.observableArrayList();
 	private ObservableList<Relatorio_BodeProd> produtos = FXCollections.observableArrayList();
@@ -425,6 +426,7 @@ public class InterfaceGraficaController implements Initializable{
     	try {
 	    	bodeEscolha = Integer.parseInt(idBodeProdCad.getText());
 			produto = new Produto();
+			produto.setCpf_fazendeiro(fazendeiroSessao.getCpf());
 			produto.setCategoria(categoriaProdCad.getText());
 			produto.setPeso(Float.parseFloat(pesoProdCad.getText()));
 			produto.setDescricao(descricaoProdCad.getText());
@@ -436,8 +438,12 @@ public class InterfaceGraficaController implements Initializable{
 			if(bode !=null) {
 				pd = new ProdutoDAO();
 				pd.Cadastrar(produto);
-				listaProduto = pd.Buscar(produto.getCategoria());
-				int ultimoIndice = listaProduto.size()-1;
+				listaProduto = pd.Buscar(produto.getCpf_fazendeiro());
+				if (listaProduto.size()==0) {
+					 ultimoIndice = listaProduto.size();
+				}else {
+					 ultimoIndice = listaProduto.size()-1;
+				}
 				bpDAO.cadastrar(bodeEscolha, listaProduto.get(ultimoIndice).getId());
 				
 				Alerts.cadasterProd();
