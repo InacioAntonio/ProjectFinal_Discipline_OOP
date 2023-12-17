@@ -33,6 +33,14 @@ public class Relatorio_BodeProd extends BodeREL{
 	}
 	
 	
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	public int getId() {
 		return Id;
 	}

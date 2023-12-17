@@ -60,5 +60,33 @@ public abstract class Alerts {
 		 alert.setContentText("Não foi possível cadastrar este produto");
 		 alert.showAndWait();
 	}
+	public static void Edit() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Atualizar");
+		alert.setHeaderText("Atualização bem sucedida");
+		alert.setContentText("Atualização Realizada com Sucesso");
+		alert.showAndWait();
+	}
+	public static void notEdit() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Atualizar");
+		alert.setHeaderText("Atualização mal sucedida");
+		alert.setContentText("Atualização NÃO foi Realizada com Sucesso");
+		alert.showAndWait();
+	}
+	public static void Delete() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Deletar");
+		alert.setHeaderText("Exclusão bem sucedida");
+		alert.setContentText("Exclusão  foi Realizada com Sucesso");
+		alert.showAndWait();
+	}
+	public static void notDelete() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Deletar");
+		alert.setHeaderText("Exclusão mal sucedida");
+		alert.setContentText("Exclusão  não foi Realizada com Sucesso");
+		alert.showAndWait();
+	}
 	
 }

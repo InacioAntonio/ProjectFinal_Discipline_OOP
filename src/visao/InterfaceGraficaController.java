@@ -20,6 +20,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -73,6 +74,7 @@ public class InterfaceGraficaController implements Initializable{
     
     @FXML
     private AnchorPane  editProdutoScreen;
+    
 
     @FXML
     private TextField nameCadaster;
@@ -88,7 +90,10 @@ public class InterfaceGraficaController implements Initializable{
     
     @FXML
     private AnchorPane cadasterBodeScreen;
-
+    
+    @FXML
+    private AnchorPane editBodeScreen;
+    
     @FXML
     private ToggleGroup genero;
    
@@ -142,6 +147,16 @@ public class InterfaceGraficaController implements Initializable{
 
     @FXML
     private RadioButton machoCad;
+    
+    @FXML
+    private TextField NomeBodeEdit;
+    
+    @FXML
+    private TextField NomePesoEdit;
+    
+    @FXML
+    private TextField PesoBodeEdit;
+    
     
     @FXML
     private TableColumn<Relatorio_BodeProd, String> categoriaJfx;
@@ -215,6 +230,9 @@ public class InterfaceGraficaController implements Initializable{
     @FXML
     private TableView<Bode>  tabelaBodesBusca;
     
+    @FXML
+    private TableView<Relatorio_BodeProd> tabelaBodesEdit;
+    
     Alert alert;
     
     @Override
@@ -227,6 +245,7 @@ public class InterfaceGraficaController implements Initializable{
     	relatorioBodeScreen.setVisible(false);
     	cadasterProdutoScreen.setVisible(false);
     	editProdutoScreen.setVisible(false);
+    	editBodeScreen.setVisible(false);
 	}
     
     private void intializeRelatorioGeral() {
@@ -464,6 +483,99 @@ public class InterfaceGraficaController implements Initializable{
 
     @FXML
     private void handleSelectionarProd() {
+    	pd = new ProdutoDAO();
+    	try {
+    		if(idProdEdit.getText()==null) {
+    		}else {
+    			int ProdutoEscolha = Integer.parseInt(idProdEdit.getText());
+        		Produto teste = null;
+        		teste = pd.Buscar(ProdutoEscolha);
+        		if(teste != null ) {
+        			produto = new Produto();
+    			//System.out.println("ERRO");
+    			produto.setId(ProdutoEscolha);
+    			categoriaProdEdit.setText(teste.getCategoria());
+    			pesoProdEdit.setText(String.valueOf(teste.getPeso()));
+    			descricaoProdEdit.setText(teste.getDescricao());
+    			precoProdEdit.setText(String.valueOf(teste.getPreco()));
+    			qtdProdEdit.setText(String.valueOf(teste.getQuantidade()));
+        		}
+    		}
+    		
+    	}catch(Exception e) {
+    		System.out.println(e.toString());
+    	}
+    }
+    @FXML
+    private void handleEditProduto() {
+    	pd = new ProdutoDAO();
+    	try {
+    		if(idProdEdit.getText()==null) {
+    			Alerts.notEdit();
+    		}else {
+    			int ProdutoEscolha = Integer.parseInt(idProdEdit.getText());
+        		Produto teste = null;
+        		teste = pd.Buscar(ProdutoEscolha);
+        		if(teste != null ) {
+        			produto = new Produto();
+    			//System.out.println("ERRO");
+    			produto.setId(ProdutoEscolha);
+    			
+    			produto.setCategoria(categoriaProdEdit.getText());
+    			produto.setPeso(Float.parseFloat(pesoProdEdit.getText()));
+    			produto.setDescricao(descricaoProdEdit.getText());
+    			produto.setPreco(Float.parseFloat(precoProdEdit.getText()));
+    			produto.setQuantidade(Integer.parseInt(qtdProdEdit.getText()));
+    			pd.Atualizar(produto);
+    			Alerts.Edit();
+    			handleVoltarEditProd();
+        		}else {
+        			Alerts.notEdit();
+        		}
+    		}
+    		
+    	}catch(Exception e) {
+    		System.out.println(e.toString());
+    	}
+    }
+    @FXML
+    private void handleDeleteProduto() {
+    	pd = new ProdutoDAO();
+    
+    	try {
+    		if(idProdEdit.getText()==null) {
+    			Alerts.notDelete();
+    		}else {
+    			int ProdutoEscolha = Integer.parseInt(idProdEdit.getText());
+        		Produto teste = null;
+        		teste = pd.Buscar(ProdutoEscolha);
+        		if(teste != null ) {
+        			produto = new Produto();
+    			//System.out.println("ERRO");
+    			produto.setId(ProdutoEscolha);
+    			produto.setCategoria(categoriaProdEdit.getText());
+    			produto.setPeso(Float.parseFloat(pesoProdEdit.getText()));
+    			produto.setDescricao(descricaoProdEdit.getText());
+    			produto.setPreco(Float.parseFloat(precoProdEdit.getText()));
+    			produto.setQuantidade(Integer.parseInt(qtdProdEdit.getText()));
+    			bpDAO.deletarProduto(ProdutoEscolha);
+    			pd.Deletar(produto);
+    			Alerts.Delete();
+    			handleVoltarEditProd();
+        		}else {
+        			Alerts.notDelete();
+        		}
+    		}
+    		
+    	}catch(Exception e) {
+    	System.out.println(e.toString());
+    	}
+    }
+    @FXML
+    private void handleNavigationEditBode() {
+    	mainScreen.setVisible(false);
+    	editBodeScreen.setVisible(true);
+    	
     	
     }
 }

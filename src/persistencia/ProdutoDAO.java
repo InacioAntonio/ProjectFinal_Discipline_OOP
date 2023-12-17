@@ -123,6 +123,8 @@ public class ProdutoDAO {
 	}
 	public void Deletar(int AuxId) {//Delete Por ID
 		// Precisa Atualizar as chaves primeiro
+		Bode_produtoDAO bpd = new Bode_produtoDAO();
+		bpd.deletarProduto(AuxId);
 		Produto teste = null;
 		teste = this.Buscar(AuxId);
 		try {
