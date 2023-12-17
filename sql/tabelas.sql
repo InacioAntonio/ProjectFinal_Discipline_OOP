@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Bode(
 	peso REAL NOT NULL,
 	genero VARCHAR(20) NOT NULL,
 	PRIMARY KEY (id),
-	CONSTRAINT cpf_fazendeiro FOREIGN KEY (cpf_fazendeiro) REFERENCES Fazendeiro(cpf)
+	CONSTRAINT cpf_fazendeiro FOREIGN KEY (cpf_fazendeiro) REFERENCES Fazendeiro(cpf) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Produto(
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS Produto(
 	descricao TEXT NOT NULL,
 	cpf_fazendeiro VARCHAR(14) NOT NULL,
 	PRIMARY KEY(id),
-	CONSTRAINT cpf_fazendeiro FOREIGN KEY (cpf_fazendeiro) REFERENCES Fazendeiro(cpf)
+	CONSTRAINT cpf_fazendeiro FOREIGN KEY (cpf_fazendeiro) REFERENCES Fazendeiro(cpf) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Bode_produto(

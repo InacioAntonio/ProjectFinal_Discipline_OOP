@@ -7,7 +7,15 @@ public class Produto {
 	private String categoria;
 	private String descricao;
 	private int Quantidade;
-	
+	private String Cpf_fazendeiro;
+	public String getCpf_fazendeiro() {
+		return Cpf_fazendeiro;
+	}
+
+	public void setCpf_fazendeiro(String cpf_fazendeiro) {
+		Cpf_fazendeiro = cpf_fazendeiro;
+	}
+
 	public int getQuantidade() {
 		return Quantidade;
 	}
@@ -16,12 +24,13 @@ public class Produto {
 		Quantidade = quantidade;
 	}
 
-	public Produto(int id, String categoria, String descricao,int Quantidade,float peso) {
+	public Produto(int id, String categoria, String descricao,int Quantidade,float peso,String cpf_fazendeiro) {
 		this.id = id;
 		this.categoria = categoria;
 		this.descricao = descricao;
 		this.Quantidade = Quantidade;
 		this.peso = peso;
+		this.Cpf_fazendeiro = cpf_fazendeiro;
 	}
 	public Produto() {
 		
