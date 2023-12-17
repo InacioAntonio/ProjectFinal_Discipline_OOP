@@ -35,14 +35,16 @@ CREATE TABLE IF NOT EXISTS Produto(
 	quantidade INT,
 	categoria TEXT NOT NULL,
 	descricao TEXT NOT NULL,
-	PRIMARY KEY(id)
+	cpf_fazendeiro VARCHAR(14) NOT NULL,
+	PRIMARY KEY(id),
+	CONSTRAINT cpf_fazendeiro FOREIGN KEY (cpf_fazendeiro) REFERENCES Fazendeiro(cpf)
 );
 
 CREATE TABLE IF NOT EXISTS Bode_produto(
 	id_bode INT,
 	id_produto INT,
-	CONSTRAINT id_bode FOREIGN KEY (id_bode) REFERENCES Bode(id) ON DELETE CASCADE,
-	CONSTRAINT id_produto FOREIGN KEY (id_produto) REFERENCES Produto(id) ON DELETE CASCADE,
+	CONSTRAINT id_bode FOREIGN KEY (id_bode) REFERENCES Bode(id),
+	CONSTRAINT id_produto FOREIGN KEY (id_produto) REFERENCES Produto(id),
 	PRIMARY KEY(id_bode, id_produto)
 );
 

@@ -672,6 +672,7 @@ public class InterfaceGraficaController implements Initializable{
 			Alerts.editBode();
 			handleBtnVoltarEditBode();
 		}else {
+			Alerts.notEdit();
 			Alerts.typeCampusID();
 		}
     }
