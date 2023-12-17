@@ -81,6 +81,7 @@ public abstract class Alerts {
 		alert.setContentText("Exclusão  foi Realizada com Sucesso");
 		alert.showAndWait();
 	}
+	
 	public static void notDelete() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Deletar");
@@ -89,4 +90,35 @@ public abstract class Alerts {
 		alert.showAndWait();
 	}
 	
+	public static void typeCampusID() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Preencher campus ID");
+		alert.setHeaderText("Não é possível selecionar este ID");
+		alert.setContentText("Preenchar o campus ID para poder selecionar");
+		alert.showAndWait();
+	}
+	
+	public static void editBode() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Editar bode");
+		alert.setHeaderText("Bode alterado");
+		alert.setContentText("Bode alterado com sucesso");
+		alert.showAndWait();
+	}
+	
+	public static void bodeNotFoundEdit() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Editar Bode");
+		alert.setHeaderText("Bode não encontrado");
+		alert.setContentText("Não foi encontrado bode com este ID");
+		alert.showAndWait();
+	}
+	
+	public static void deleteBode() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Deletar Bode");
+		alert.setHeaderText("Bode deletado");
+		alert.setContentText("Bode deletado com sucesso");
+		alert.showAndWait();
+	}
 }

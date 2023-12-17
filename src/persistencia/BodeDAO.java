@@ -64,6 +64,7 @@ public class BodeDAO {
 			System.out.println(e.toString());
 		}
 	}
+	
 	public ArrayList<Bode> buscar(String cpf) {
 		ArrayList<Bode> bodeBusca = null;
 		String cpfFazendeiro, genero, nome;
@@ -128,14 +129,14 @@ public class BodeDAO {
 				Bode teste2=this.BuscarId(auxid);
 				if (teste2!=null) {
 					con.conectar();
-				PreparedStatement atualiza = con.getConexao().prepareStatement(atualizar);
-				atualiza.setString(1, b.getCpfFazendeiro());
-				atualiza.setFloat(2,b.getPeso() );
-				atualiza.setString(3,b.getNome());
-				atualiza.setString(4, b.getGenero());
-				atualiza.setInt(5, auxid);
-				atualiza.execute();
-				atualiza.close();
+					PreparedStatement atualiza = con.getConexao().prepareStatement(atualizar);
+					atualiza.setString(1, b.getCpfFazendeiro());
+					atualiza.setFloat(2,b.getPeso() );
+					atualiza.setString(3,b.getNome());
+					atualiza.setString(4, b.getGenero());
+					atualiza.setInt(5, auxid);
+					atualiza.execute();
+					atualiza.close();
 				}
 				
 			}else {
@@ -185,6 +186,25 @@ public class BodeDAO {
 	public void deletar(int AuxId) {
 		//Incompleto (Deletar tabela chaves antes)
 		Bode teste = this.BuscarId(AuxId);
+		try {
+			con.conectar();
+			if (teste!=null) {
+				PreparedStatement instrucao = con.getConexao().prepareStatement(deletarId);
+				instrucao.setInt(1, AuxId);
+				instrucao.execute();
+			}else {
+				System.out.println("Error");
+			}
+			con.desconectar();
+		}catch(Exception e) {
+			System.out.println(e.toString());
+		}
+	}
+	
+	public void deletar(int AuxId, String cpf) {
+		//Incompleto (Deletar tabela chaves antes)
+		Bode teste = this.BuscarId(AuxId);
+		desvincular(cpf);
 		try {
 			con.conectar();
 			if (teste!=null) {

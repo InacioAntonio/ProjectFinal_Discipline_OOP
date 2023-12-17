@@ -39,6 +39,7 @@ public class InterfaceGraficaController implements Initializable{
 	private Produto produto;
 	ArrayList<Bode> listaBode;
 	ArrayList<Produto> listaProduto;
+	ArrayList<Relatorio_BodeProd> listaRelProd;
 	private ObservableList<Relatorio_BodeProd> relatorioBodeProduto = FXCollections.observableArrayList();
 	private ObservableList<Relatorio_BodeProd> relatorioBodes = FXCollections.observableArrayList();
 	
@@ -46,6 +47,7 @@ public class InterfaceGraficaController implements Initializable{
 	private int idade;
 	private int bodeEscolha;
 	private ObservableList<Bode> bodes = FXCollections.observableArrayList();
+	private ObservableList<Bode> bodesEdit = FXCollections.observableArrayList();
 	private ObservableList<Relatorio_BodeProd> produtos = FXCollections.observableArrayList();
 
     @FXML
@@ -143,19 +145,28 @@ public class InterfaceGraficaController implements Initializable{
     private TextField qtdProdEdit;
     
     @FXML
+    private TextField idBodeEdit;
+    
+    @FXML
     private RadioButton femeaCad;
 
     @FXML
     private RadioButton machoCad;
     
     @FXML
-    private TextField NomeBodeEdit;
+    private RadioButton femeaEditBode;
+    
+    @FXML
+    private RadioButton machoEditBod;
+    
+    @FXML
+    private TextField nomeBodeEdit;
     
     @FXML
     private TextField NomePesoEdit;
     
     @FXML
-    private TextField PesoBodeEdit;
+    private TextField pesoBodeEdit;
     
     
     @FXML
@@ -219,6 +230,12 @@ public class InterfaceGraficaController implements Initializable{
     private TableColumn<Bode, Float> pesoBodeTable;
     
     @FXML
+    private TableColumn<Bode, Integer> idBodeEditTabela;
+    
+    @FXML
+    private TableColumn<Bode, String> nomeBodeEditTabela;
+    
+    @FXML
     private TableView<Relatorio_BodeProd> relatorioGeralJfx;
     
     @FXML
@@ -231,7 +248,7 @@ public class InterfaceGraficaController implements Initializable{
     private TableView<Bode>  tabelaBodesBusca;
     
     @FXML
-    private TableView<Relatorio_BodeProd> tabelaBodesEdit;
+    private TableView<Bode> tabelaBodesEdit;
     
     Alert alert;
     
@@ -281,6 +298,8 @@ public class InterfaceGraficaController implements Initializable{
 			    	cpfInput.setText("");
 			    	passwdInput.setText("");
 				}
+			}else {
+				Alerts.notLogin();
 			}
 		}catch(Exception e) {
 			Alerts.notLogin();
@@ -298,6 +317,8 @@ public class InterfaceGraficaController implements Initializable{
 	private void handleBtnScreenCadastrar(){
     	loginScreen.setVisible(false);
     	cadasterScreen.setVisible(true);
+    	cpfInput.setText("");
+    	passwdInput.setText("");
     }
 
     @FXML
@@ -339,7 +360,7 @@ public class InterfaceGraficaController implements Initializable{
 			bd  = new BodeDAO();
 			bode.setCpfFazendeiro(fazendeiroSessao.getCpf());
 			bode.setNome(nameBodeCad.getText());
-			bode.setGenero(femeaCad.isSelected() ? "Macho" : "Fêmea");
+			bode.setGenero(femeaCad.isSelected() ? "Fêmea" : "Macho");
 			bode.setPeso(Float.parseFloat(pesoBodeCad.getText()));
 			bd.CadastrarBode(bode);
 			Alerts.cadasterBode();
@@ -470,7 +491,12 @@ public class InterfaceGraficaController implements Initializable{
         bpDAO = new Bode_produtoDAO();
         
         tabelaEditProduto.getItems().clear();
-        produtos.addAll(bpDAO.relatorioGeral(fazendeiroSessao.getCpf()));
+        listaRelProd = bpDAO.relatorioGeral(fazendeiroSessao.getCpf());
+        for(int i=0; i < listaRelProd.size();i++) {
+            if(listaRelProd.get(i).getId() !=0 ) {
+            	produtos.add(listaRelProd.get(i));
+            }
+        }
         tabelaEditProduto.setItems(produtos);
     }
     
@@ -486,19 +512,19 @@ public class InterfaceGraficaController implements Initializable{
     	pd = new ProdutoDAO();
     	try {
     		if(idProdEdit.getText()==null) {
+    			Alerts.typeCampusID();
     		}else {
     			int ProdutoEscolha = Integer.parseInt(idProdEdit.getText());
         		Produto teste = null;
         		teste = pd.Buscar(ProdutoEscolha);
         		if(teste != null ) {
         			produto = new Produto();
-    			//System.out.println("ERRO");
-    			produto.setId(ProdutoEscolha);
-    			categoriaProdEdit.setText(teste.getCategoria());
-    			pesoProdEdit.setText(String.valueOf(teste.getPeso()));
-    			descricaoProdEdit.setText(teste.getDescricao());
-    			precoProdEdit.setText(String.valueOf(teste.getPreco()));
-    			qtdProdEdit.setText(String.valueOf(teste.getQuantidade()));
+	    			produto.setId(ProdutoEscolha);
+	    			categoriaProdEdit.setText(teste.getCategoria());
+	    			pesoProdEdit.setText(String.valueOf(teste.getPeso()));
+	    			descricaoProdEdit.setText(teste.getDescricao());
+	    			precoProdEdit.setText(String.valueOf(teste.getPreco()));
+	    			qtdProdEdit.setText(String.valueOf(teste.getQuantidade()));
         		}
     		}
     		
@@ -518,17 +544,24 @@ public class InterfaceGraficaController implements Initializable{
         		teste = pd.Buscar(ProdutoEscolha);
         		if(teste != null ) {
         			produto = new Produto();
-    			//System.out.println("ERRO");
-    			produto.setId(ProdutoEscolha);
-    			
-    			produto.setCategoria(categoriaProdEdit.getText());
-    			produto.setPeso(Float.parseFloat(pesoProdEdit.getText()));
-    			produto.setDescricao(descricaoProdEdit.getText());
-    			produto.setPreco(Float.parseFloat(precoProdEdit.getText()));
-    			produto.setQuantidade(Integer.parseInt(qtdProdEdit.getText()));
-    			pd.Atualizar(produto);
-    			Alerts.Edit();
-    			handleVoltarEditProd();
+        			
+	    			produto.setId(ProdutoEscolha);
+	    			produto.setCategoria(categoriaProdEdit.getText());
+	    			produto.setPeso(Float.parseFloat(pesoProdEdit.getText()));
+	    			produto.setDescricao(descricaoProdEdit.getText());
+	    			produto.setPreco(Float.parseFloat(precoProdEdit.getText()));
+	    			produto.setQuantidade(Integer.parseInt(qtdProdEdit.getText()));
+	    			pd.Atualizar(produto);
+	    			
+	    			Alerts.Edit();
+	    			
+	    			idProdEdit.setText("");
+	    			categoriaProdEdit.setText("");
+	    			pesoProdEdit.setText("");
+	    			descricaoProdEdit.setText("");
+	    			precoProdEdit.setText("");
+	    			qtdProdEdit.setText("");
+	    			handleVoltarEditProd();
         		}else {
         			Alerts.notEdit();
         		}
@@ -551,17 +584,16 @@ public class InterfaceGraficaController implements Initializable{
         		teste = pd.Buscar(ProdutoEscolha);
         		if(teste != null ) {
         			produto = new Produto();
-    			//System.out.println("ERRO");
-    			produto.setId(ProdutoEscolha);
-    			produto.setCategoria(categoriaProdEdit.getText());
-    			produto.setPeso(Float.parseFloat(pesoProdEdit.getText()));
-    			produto.setDescricao(descricaoProdEdit.getText());
-    			produto.setPreco(Float.parseFloat(precoProdEdit.getText()));
-    			produto.setQuantidade(Integer.parseInt(qtdProdEdit.getText()));
-    			bpDAO.deletarProduto(ProdutoEscolha);
-    			pd.Deletar(produto);
-    			Alerts.Delete();
-    			handleVoltarEditProd();
+	    			produto.setId(ProdutoEscolha);
+	    			produto.setCategoria(categoriaProdEdit.getText());
+	    			produto.setPeso(Float.parseFloat(pesoProdEdit.getText()));
+	    			produto.setDescricao(descricaoProdEdit.getText());
+	    			produto.setPreco(Float.parseFloat(precoProdEdit.getText()));
+	    			produto.setQuantidade(Integer.parseInt(qtdProdEdit.getText()));
+	    			bpDAO.deletarProduto(ProdutoEscolha);
+	    			pd.Deletar(produto);
+	    			Alerts.Delete();
+	    			handleVoltarEditProd();
         		}else {
         			Alerts.notDelete();
         		}
@@ -571,11 +603,105 @@ public class InterfaceGraficaController implements Initializable{
     	System.out.println(e.toString());
     	}
     }
+    
+    private void initializeTabelaBodes() {
+    	idBodeEditTabela.setCellValueFactory(new PropertyValueFactory<Bode, Integer>("id"));
+    	nomeBodeEditTabela.setCellValueFactory(new PropertyValueFactory<Bode, String>("nome"));;
+        
+        bd = new BodeDAO();
+        tabelaBodesEdit.getItems().clear();
+        bodesEdit.addAll(bd.buscar(fazendeiroSessao.getCpf()));
+        tabelaBodesEdit.setItems(bodesEdit);
+    }
+    
     @FXML
     private void handleNavigationEditBode() {
     	mainScreen.setVisible(false);
     	editBodeScreen.setVisible(true);
+    	initializeTabelaBodes();
+    }
+    
+    @FXML
+    private void handleBtnVoltarEditBode() {
+    	mainScreen.setVisible(true);
+    	editBodeScreen.setVisible(false);	
+    	intializeRelatorioGeral();
+    	idBodeEdit.setText("");
+    	nomeBodeEdit.setText("");
+		pesoBodeEdit.setText("");
+		machoEditBod.setSelected(false);
+		femeaEditBode.setSelected(false);
+    }
+    
+    @FXML
+    private void handleBtnSelEditBode() {
+    	bd = new BodeDAO();
+    	pd = new ProdutoDAO();
+    	try {
+    		if(idBodeEdit.getText()==null) {
+    			Alerts.typeCampusID();
+    		}else {
+    			int bodeEscolha = Integer.parseInt(idBodeEdit.getText());
+        		Bode teste = null;
+        		teste = bd.BuscarId(bodeEscolha);
+        		if(teste != null ) {
+        			nomeBodeEdit.setText(teste.getNome());
+	    			pesoBodeEdit.setText(String.valueOf(teste.getPeso()));
+	    			machoEditBod.setSelected(teste.getGenero().equals("Macho"));
+	    			femeaEditBode.setSelected(teste.getGenero().equals("Fêmea"));
+        		}else {
+        			Alerts.bodeNotFoundEdit();
+        		}
+    		}
+    		
+    	}catch(Exception e) {
+    		System.out.println(e.toString());
+    	}
+    }
+    
+    @FXML 
+    private void handleBtnEditBode() {
     	
+		if(idBodeEdit.getText()!= null) {
+	    	bode = new Bode();
+	    	bode.setCpfFazendeiro(fazendeiroSessao.getCpf());
+			bode.setNome(nomeBodeEdit.getText());
+			bode.setGenero(femeaEditBode.isSelected() ? "Macho" : "Fêmea");
+			bode.setPeso(Float.parseFloat(pesoBodeEdit.getText()));
+			bd.atualizar(bode, Integer.parseInt(idBodeEdit.getText()));
+			Alerts.editBode();
+			handleBtnVoltarEditBode();
+		}else {
+			Alerts.typeCampusID();
+		}
+    }
+    
+    @FXML
+    private void handleBtnDeletarBode(){
     	
+    	bode = new Bode();
+		bd = new BodeDAO();
+		bpDAO = new Bode_produtoDAO();
+		
+    	try {
+    		if(idBodeEdit.getText()==null) {
+    			Alerts.typeCampusID();
+    		}else {
+    			int bodeEscolha = Integer.parseInt(idBodeEdit.getText());
+        		Bode teste = null;
+        		teste = bd.BuscarId(bodeEscolha);
+        		if(teste != null ) {
+        			bpDAO.deletarBode(bodeEscolha);
+        			bd.deletar(bodeEscolha);
+        			Alerts.deleteBode();
+        			handleBtnVoltarEditBode();
+        		}else {
+        			Alerts.bodeNotFoundEdit();
+        		}
+    		}
+    		
+    	}catch(Exception e) {
+    		System.out.println(e.toString());
+    	}
     }
 }
