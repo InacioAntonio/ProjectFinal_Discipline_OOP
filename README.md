@@ -7,4 +7,4 @@ This repository was my final project for the OOP discipline in the TADS course a
 ![Relational Diagram](./diagramas/Diagrama%20relacional.jpg)
 
 * Relation Entity Diagram
-![Relation Entity Diagram](./diagramas/Diagrama%20DER.jpg)
+![Relation Entity Diagram](./diagramas/Diagrama%20DER.png)

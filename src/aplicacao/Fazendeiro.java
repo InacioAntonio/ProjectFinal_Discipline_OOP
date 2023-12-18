@@ -15,6 +15,14 @@ public class Fazendeiro {
 		this.telefone = telefone;
 	}
 	
+	public Fazendeiro() {
+		this.nome = nome;
+		this.cpf = cpf;
+		this.senha = senha;
+		this.idade = idade;
+		this.telefone = telefone;
+	}
+	
 	public String getNome() {
 		return nome;
 	}

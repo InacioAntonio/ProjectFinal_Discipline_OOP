@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class BodeDAO {
 	private String inserir ="INSERT INTO Bode(nome,cpf_fazendeiro,peso,genero) VALUES(?,?,?,?) ";
-	private String vinculaBodes = "UPDATE Bode SET cpf_fazendeiro = ? WHERE cpf_fazendeiro = 0";
-	private String desvinculaBodes = "UPDATE Bode SET cpf_fazendeiro = 0 WHERE cpf_fazendeiro = ?";	
+	private String vinculaBodes = "UPDATE Bode SET cpf_fazendeiro = ? WHERE cpf_fazendeiro = '0'";
+	private String desvinculaBodes = "UPDATE Bode SET cpf_fazendeiro = '0' WHERE cpf_fazendeiro = ?";	
 	private String atualizar = "UPDATE Bode SET cpf_fazendeiro = ?, peso = ?, nome = ?, genero = ?  WHERE id = ?";
 	private String buscar = "SELECT * FROM Bode WHERE cpf_fazendeiro = ?";//Corrigir esse nome para listagem
 	private String relatorio = "SELECT * FROM relatorio_geral_de_Bodes";

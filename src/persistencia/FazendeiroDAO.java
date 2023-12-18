@@ -10,6 +10,7 @@ public class FazendeiroDAO {
 	private String atualizar = "UPDATE Fazendeiro SET nome = ?, cpf = ?, senha = ?, idade = ?, telefone = ? WHERE cpf = ?";
 	private String buscar = "SELECT * FROM Fazendeiro WHERE cpf = ?";
 	private BodeDAO bodeDao = new BodeDAO();
+	private ProdutoDAO produtoDao = new ProdutoDAO();
 	private Conexao con;
 	
 	public FazendeiroDAO() {
@@ -87,7 +88,7 @@ public class FazendeiroDAO {
 			if(busca != null) {
 				
 				bodeDao.desvincular(cpfAntigo);
-				
+				produtoDao.desvincular(cpfAntigo);
 				con.conectar();
 				
 				PreparedStatement instrucao = con.getConexao().prepareStatement(atualizar);
@@ -102,6 +103,7 @@ public class FazendeiroDAO {
 				con.desconectar();
 				
 				bodeDao.vincular(f.getCpf());
+				produtoDao.vincular(f.getCpf());
 			}
 		}catch(Exception e) {
 			System.out.println(e.toString());

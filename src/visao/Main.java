@@ -13,7 +13,7 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("InterfaceGrafica.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("Tela de Exemplo"); //título da janela
+			primaryStage.setTitle("BodinGerente"); //título da janela
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

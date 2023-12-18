@@ -121,4 +121,28 @@ public abstract class Alerts {
 		alert.setContentText("Bode deletado com sucesso");
 		alert.showAndWait();
 	}
+	
+	public static void deleteConta() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Excluir conta");
+		alert.setHeaderText("Fazendeiro deletado");
+		alert.setContentText("Conta de fazendeiro excluída com sucesso");
+		alert.showAndWait();
+	}
+	
+	public static void updateConta() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Atualizar conta");
+		alert.setHeaderText("Fazendeiro atualizado");
+		alert.setContentText("Conta de fazendeiro atualizada com sucesso");
+		alert.showAndWait();
+	}
+	
+	public static void notUpdateConta() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Atualizar conta");
+		alert.setHeaderText("Fazendeiro não atualizado");
+		alert.setContentText("Não foi possível atualizar a conta do fazendeiro");
+		alert.showAndWait();
+	}
 }

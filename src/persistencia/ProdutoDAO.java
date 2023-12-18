@@ -5,6 +5,8 @@ import aplicacao.*;
 import java.util.ArrayList;
 public class ProdutoDAO {
 	private String inserir ="INSERT INTO Produto(categoria,descricao,preco,peso,quantidade,cpf_fazendeiro)VALUES(?,?,?,?,?,?)";
+	private String vinculaProdutos = "UPDATE Produto SET cpf_fazendeiro = ? WHERE cpf_fazendeiro = '0'";
+	private String desvinculaProdutos = "UPDATE Produto SET cpf_fazendeiro = '0' WHERE cpf_fazendeiro = ?";	
 	private String buscar = "SELECT * FROM Produto WHERE cpf_fazendeiro=? ";
 	private String buscarId = "SELECT * FROM Produto WHERE id = ? ";
 	private String deletar = "DELETE FROM Produto WHERE categoria = ? ";
@@ -13,9 +15,11 @@ public class ProdutoDAO {
 	private String atualizar = "UPDATE Produto SET categoria = ?, descricao=?, preco=?, peso=?, quantidade=? WHERE categoria = ?";
 	private String atualizarId = "UPDATE Produto SET categoria=?, descricao=?, preco=?, peso=?, quantidade=? WHERE id = ?";
 	private Conexao con;
+	
 	public ProdutoDAO() {
 		con = new Conexao("postgres","1234","jdbc:postgresql://localhost:5432/BDbode");
 	}
+	
 	public void  Cadastrar(Produto p) {
 		try {
 			con.conectar();
@@ -33,6 +37,32 @@ public class ProdutoDAO {
 			System.out.println(e.toString());
 		}
 	}
+	public void vincular(String cpf) {
+		try {
+			con.conectar();
+			PreparedStatement instrucao = con.getConexao().prepareStatement(vinculaProdutos);
+			instrucao.setString(1, cpf);
+			instrucao.execute();
+			
+			con.desconectar();
+		}catch(Exception e) {
+			System.out.println(e.toString());
+		}
+	}
+	
+	public void desvincular(String cpf) {
+		try {
+			con.conectar();
+			PreparedStatement instrucao = con.getConexao().prepareStatement(desvinculaProdutos);
+			instrucao.setString(1, cpf);
+			instrucao.execute();
+			
+			con.desconectar();
+		}catch(Exception e) {
+			System.out.println(e.toString());
+		}
+	}
+	
 	public ArrayList<Produto> Buscar(String cpf_fazendeiro) {
 		ArrayList<Produto> lista = null;
 		try {
@@ -40,7 +70,7 @@ public class ProdutoDAO {
 			PreparedStatement instrucao = con.getConexao().prepareStatement(buscar);
 			instrucao.setString(1, cpf_fazendeiro);
 			ResultSet rs = instrucao.executeQuery();
-			lista = new ArrayList<>();
+			lista = new ArrayList<Produto>();
 			while(rs.next()) {
 				Produto p = new Produto(rs.getInt("id"),rs.getString("categoria"),rs.getString("descricao"),rs.getInt("Quantidade"),rs.getFloat("peso"),rs.getString("cpf_fazendeiro"));
 				lista.add(p);

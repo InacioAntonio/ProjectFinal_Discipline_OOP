@@ -39,7 +39,7 @@ public class InterfaceGraficaController implements Initializable{
 	private Produto produto;
 	ArrayList<Bode> listaBode;
 	ArrayList<Produto> listaProduto;
-	ArrayList<Relatorio_BodeProd> listaRelProd;
+	ArrayList<Produto> listaRelProd;
 	private ObservableList<Relatorio_BodeProd> relatorioBodeProduto = FXCollections.observableArrayList();
 	private ObservableList<Relatorio_BodeProd> relatorioBodes = FXCollections.observableArrayList();
 	
@@ -49,22 +49,43 @@ public class InterfaceGraficaController implements Initializable{
 	private int ultimoIndice;
 	private ObservableList<Bode> bodes = FXCollections.observableArrayList();
 	private ObservableList<Bode> bodesEdit = FXCollections.observableArrayList();
-	private ObservableList<Relatorio_BodeProd> produtos = FXCollections.observableArrayList();
+	private ObservableList<Produto> produtos = FXCollections.observableArrayList();
 
     @FXML
     private TextField ageCadaster;
+    
+    @FXML
+    private TextField cpfEdit;
+    
+    @FXML
+    private TextField passwdEdit;
+    
+    @FXML
+    private TextField nameEdit;
+    
+    @FXML
+    private TextField numberEdit;
+    
+    @FXML
+    private TextField ageEdit;
 
     @FXML
     private AnchorPane cadasterScreen;
     
     @FXML
     private AnchorPane cadasterProdutoScreen;
+    
+    @FXML
+    private AnchorPane editContaScreen;
 
     @FXML
     private TextField cpfCadaster;
 
     @FXML
     private TextField cpfInput;
+    
+    @FXML
+    private TextField idBodeEditProd;
 
     @FXML
     private AnchorPane loginScreen;
@@ -161,6 +182,12 @@ public class InterfaceGraficaController implements Initializable{
     private RadioButton machoEditBod;
     
     @FXML
+    private RadioButton editProdBodAdd;
+    
+    @FXML
+    private RadioButton editProdBodRem;
+    
+    @FXML
     private TextField nomeBodeEdit;
     
     @FXML
@@ -174,7 +201,7 @@ public class InterfaceGraficaController implements Initializable{
     private TableColumn<Relatorio_BodeProd, String> categoriaJfx;
 
     @FXML
-    private TableColumn<Relatorio_BodeProd, Float> idBodeJfx;
+    private TableColumn<Relatorio_BodeProd, Integer> idBodeJfx;
 
     @FXML
     private TableColumn<Relatorio_BodeProd, Float> idProdutoJfx;
@@ -243,7 +270,7 @@ public class InterfaceGraficaController implements Initializable{
     private TableView<Relatorio_BodeProd> tabelaBodes;
     
     @FXML
-    private TableView<Relatorio_BodeProd> tabelaEditProduto;
+    private TableView<Produto> tabelaEditProduto;
     
     @FXML
     private TableView<Bode>  tabelaBodesBusca;
@@ -264,11 +291,12 @@ public class InterfaceGraficaController implements Initializable{
     	cadasterProdutoScreen.setVisible(false);
     	editProdutoScreen.setVisible(false);
     	editBodeScreen.setVisible(false);
+    	editContaScreen.setVisible(false);
 	}
     
     private void intializeRelatorioGeral() {
     	categoriaJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("categoria"));
-        //idBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Integer>("PesoProduto"));
+        idBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Integer>("id_bode"));
         //idProdutoJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Integer>("Preco"));;
         nomeBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("nome"));;
         pesoBodeJfx.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, Float>("peso"));;
@@ -308,6 +336,12 @@ public class InterfaceGraficaController implements Initializable{
 	}
     
     @FXML
+    private void handleBtnVoltarCad(){
+    	loginScreen.setVisible(true);
+    	cadasterScreen.setVisible(false);
+    }
+    
+    @FXML
     private void handleBtnSair() {
     	fazendeiroSessao = null;
     	mainScreen.setVisible(false);
@@ -323,27 +357,31 @@ public class InterfaceGraficaController implements Initializable{
     }
 
     @FXML
-    private void handleBtnCadastrar() throws Exception{
+    private void handleBtnCadastrar(){
 		cpf = cpfCadaster.getText();
     	fDAO = new FazendeiroDAO();
-		if(fDAO.buscar(cpf) == null) {
-			nome = nameCadaster.getText();
-			idade = Integer.parseInt(ageCadaster.getText());
-			telefone = numberCadaster.getText();
-			senha = passwdCadaster.getText();
-			
-			fazendeiro = new Fazendeiro(nome, cpf, senha, idade, telefone);
-			fDAO.cadastrar(fazendeiro);
-			Alerts.cadaster();
-			nameCadaster.setText("");
-			ageCadaster.setText("");
-			numberCadaster.setText("");
-			passwdCadaster.setText("");
-			loginScreen.setVisible(true);
-	    	cadasterScreen.setVisible(false);
-		}else {
+    	try {
+			if(fDAO.buscar(cpf) == null) {
+				nome = nameCadaster.getText();
+				idade = Integer.parseInt(ageCadaster.getText());
+				telefone = numberCadaster.getText();
+				senha = passwdCadaster.getText();
+				
+				fazendeiro = new Fazendeiro(nome, cpf, senha, idade, telefone);
+				fDAO.cadastrar(fazendeiro);
+				Alerts.cadaster();
+				nameCadaster.setText("");
+				ageCadaster.setText("");
+				numberCadaster.setText("");
+				passwdCadaster.setText("");
+				loginScreen.setVisible(true);
+		    	cadasterScreen.setVisible(false);
+			}else {
+				Alerts.notCadaster();
+			}
+    	}catch(Exception e) {
 			Alerts.notCadaster();
-		}
+    	}
     }
 
     @FXML
@@ -423,8 +461,7 @@ public class InterfaceGraficaController implements Initializable{
     
     @FXML
     private void handleCadProduto(){
-    	try {
-	    	bodeEscolha = Integer.parseInt(idBodeProdCad.getText());
+    	try {	
 			produto = new Produto();
 			produto.setCpf_fazendeiro(fazendeiroSessao.getCpf());
 			produto.setCategoria(categoriaProdCad.getText());
@@ -433,19 +470,28 @@ public class InterfaceGraficaController implements Initializable{
 			produto.setQuantidade(Integer.parseInt(qtdProdCad.getText()));
 			produto.setPreco(Float.parseFloat(precoProdCad.getText()));
 						
-			bd = new BodeDAO();
-			bode = bd.BuscarId(bodeEscolha);
-			if(bode !=null) {
-				pd = new ProdutoDAO();
-				pd.Cadastrar(produto);
-				listaProduto = pd.Buscar(produto.getCpf_fazendeiro());
-				if (listaProduto.size()==0) {
-					 ultimoIndice = listaProduto.size();
-				}else {
-					 ultimoIndice = listaProduto.size()-1;
-				}
-				bpDAO.cadastrar(bodeEscolha, listaProduto.get(ultimoIndice).getId());
+			pd = new ProdutoDAO();
+			pd.Cadastrar(produto);
+			if(!idBodeProdCad.getText().isEmpty()) {
+				System.out.println("ksaska");
+				bodeEscolha = Integer.parseInt(idBodeProdCad.getText());
+		
+				bd = new BodeDAO();
+				bode = bd.BuscarId(bodeEscolha);
+				if(bode !=null) {
+					listaProduto = pd.Buscar(produto.getCpf_fazendeiro());
+			
+					if (listaProduto.size()==0) {
+						 ultimoIndice = listaProduto.size();
+					}else {
+						 ultimoIndice = listaProduto.size()-1;
+					}
 				
+					bpDAO.cadastrar(bodeEscolha, listaProduto.get(ultimoIndice).getId());
+				}else {
+					Alerts.notCadasterProd();
+				}
+			}
 				Alerts.cadasterProd();
 				idBodeProdCad.setText("");
 				pesoProdCad.setText("");
@@ -453,11 +499,9 @@ public class InterfaceGraficaController implements Initializable{
 				descricaoProdCad.setText("");
 				qtdProdCad.setText("");
 				precoProdCad.setText("");
-				handleBtnVoltarCadProd();
-			}else {
-				Alerts.notCadasterProd();
-			}
+				handleBtnVoltarCadProd();		
     	}catch(Exception e) {
+    		Alerts.notCadasterProd();
     		System.out.println(e.toString());
     	}
 		
@@ -494,15 +538,12 @@ public class InterfaceGraficaController implements Initializable{
     	categoriaProdTabela.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("categoria"));
         descricaoProdTabela.setCellValueFactory(new PropertyValueFactory<Relatorio_BodeProd, String>("descricao"));
         
-        bpDAO = new Bode_produtoDAO();
+        pd = new ProdutoDAO();
         
         tabelaEditProduto.getItems().clear();
-        listaRelProd = bpDAO.relatorioGeral(fazendeiroSessao.getCpf());
-        for(int i=0; i < listaRelProd.size();i++) {
-            if(listaRelProd.get(i).getId() !=0 ) {
-            	produtos.add(listaRelProd.get(i));
-            }
-        }
+        listaRelProd = pd.Buscar(fazendeiroSessao.getCpf());
+        
+        produtos.addAll(pd.Buscar(fazendeiroSessao.getCpf()));
         tabelaEditProduto.setItems(produtos);
     }
     
@@ -535,6 +576,7 @@ public class InterfaceGraficaController implements Initializable{
     		}
     		
     	}catch(Exception e) {
+    		Alerts.notEdit();
     		System.out.println(e.toString());
     	}
     }
@@ -552,21 +594,61 @@ public class InterfaceGraficaController implements Initializable{
         			produto = new Produto();
         			
 	    			produto.setId(ProdutoEscolha);
+	    			produto.setCpf_fazendeiro(fazendeiroSessao.getCpf());
 	    			produto.setCategoria(categoriaProdEdit.getText());
 	    			produto.setPeso(Float.parseFloat(pesoProdEdit.getText()));
 	    			produto.setDescricao(descricaoProdEdit.getText());
 	    			produto.setPreco(Float.parseFloat(precoProdEdit.getText()));
 	    			produto.setQuantidade(Integer.parseInt(qtdProdEdit.getText()));
 	    			pd.Atualizar(produto);
+	    			if(!idBodeEditProd.getText().equals("")) {
+		    			if(editProdBodAdd.isSelected()) {
+			    				bodeEscolha = Integer.parseInt(idBodeEditProd.getText());
+			    				
+			    				bd = new BodeDAO();
+			    				bode = bd.BuscarId(bodeEscolha);
+			    				if(bode !=null) {
+			    					pd = new ProdutoDAO();
+			    					listaProduto = pd.Buscar(produto.getCpf_fazendeiro());
+			    					
+			    					if (listaProduto.size()==0) {
+			    						 ultimoIndice = listaProduto.size();
+			    					}else{
+			    						 ultimoIndice = listaProduto.size()-1;
+			    					}
+			    				
+			    					bpDAO.cadastrar(bodeEscolha, listaProduto.get(ultimoIndice).getId());
+	
+			    	    			Alerts.Edit();
+			    				}else{
+			    					Alerts.notEdit();
+			    				}
+		    			}else{
+		    				bodeEscolha = Integer.parseInt(idBodeEditProd.getText());
+		    				
+		    				bd = new BodeDAO();
+		    				bode = bd.BuscarId(bodeEscolha);
+		    				if(bode !=null) { 
+		    					bpDAO.deletarBode(bodeEscolha);
+		    	    			Alerts.Edit();
+		    				}else {
+			    				Alerts.notEdit();
+		    				}
+		    			}
+	    			}
 	    			
-	    			Alerts.Edit();
-	    			
+	    			if(!editProdBodAdd.isSelected() && !editProdBodRem.isSelected())
+		    				Alerts.Edit();
+	    		
 	    			idProdEdit.setText("");
 	    			categoriaProdEdit.setText("");
 	    			pesoProdEdit.setText("");
 	    			descricaoProdEdit.setText("");
 	    			precoProdEdit.setText("");
 	    			qtdProdEdit.setText("");
+	    			idBodeEditProd.setText("");
+	    			editProdBodAdd.setSelected(false);
+	    			editProdBodRem.setSelected(false);
 	    			handleVoltarEditProd();
         		}else {
         			Alerts.notEdit();
@@ -574,6 +656,7 @@ public class InterfaceGraficaController implements Initializable{
     		}
     		
     	}catch(Exception e) {
+    		Alerts.notEdit();
     		System.out.println(e.toString());
     	}
     }
@@ -606,7 +689,8 @@ public class InterfaceGraficaController implements Initializable{
     		}
     		
     	}catch(Exception e) {
-    	System.out.println(e.toString());
+			Alerts.notDelete();
+			System.out.println(e.toString());
     	}
     }
     
@@ -644,7 +728,7 @@ public class InterfaceGraficaController implements Initializable{
     	bd = new BodeDAO();
     	pd = new ProdutoDAO();
     	try {
-    		if(idBodeEdit.getText()==null) {
+    		if(idBodeEdit.getText().equals("")) {
     			Alerts.typeCampusID();
     		}else {
     			int bodeEscolha = Integer.parseInt(idBodeEdit.getText());
@@ -661,6 +745,7 @@ public class InterfaceGraficaController implements Initializable{
     		}
     		
     	}catch(Exception e) {
+    		Alerts.notEdit();
     		System.out.println(e.toString());
     	}
     }
@@ -668,7 +753,7 @@ public class InterfaceGraficaController implements Initializable{
     @FXML 
     private void handleBtnEditBode() {
     	
-		if(idBodeEdit.getText()!= null) {
+		if(!idBodeEdit.getText().isEmpty()) {
 	    	bode = new Bode();
 	    	bode.setCpfFazendeiro(fazendeiroSessao.getCpf());
 			bode.setNome(nomeBodeEdit.getText());
@@ -691,7 +776,7 @@ public class InterfaceGraficaController implements Initializable{
 		bpDAO = new Bode_produtoDAO();
 		
     	try {
-    		if(idBodeEdit.getText()==null) {
+    		if(idBodeEdit.getText().isEmpty()) {
     			Alerts.typeCampusID();
     		}else {
     			int bodeEscolha = Integer.parseInt(idBodeEdit.getText());
@@ -701,6 +786,15 @@ public class InterfaceGraficaController implements Initializable{
         			bpDAO.deletarBode(bodeEscolha);
         			bd.deletar(bodeEscolha);
         			Alerts.deleteBode();
+        			idProdEdit.setText("");
+	    			categoriaProdEdit.setText("");
+	    			pesoProdEdit.setText("");
+	    			descricaoProdEdit.setText("");
+	    			precoProdEdit.setText("");
+	    			qtdProdEdit.setText("");
+	    			idBodeEditProd.setText("");
+	    			editProdBodAdd.setSelected(false);
+	    			editProdBodRem.setSelected(false);
         			handleBtnVoltarEditBode();
         		}else {
         			Alerts.bodeNotFoundEdit();
@@ -708,7 +802,64 @@ public class InterfaceGraficaController implements Initializable{
     		}
     		
     	}catch(Exception e) {
+    		Alerts.notEdit();
     		System.out.println(e.toString());
     	}
+    }
+    
+    @FXML
+    private void handleBtnEditContaNav() {
+    	mainScreen.setVisible(false);
+    	editContaScreen.setVisible(true);
+ 
+    	cpfEdit.setText(fazendeiroSessao.getCpf());
+    	passwdEdit.setText(fazendeiroSessao.getSenha());
+    	nameEdit.setText(fazendeiroSessao.getNome());
+    	numberEdit.setText(fazendeiroSessao.getTelefone());
+    	ageEdit.setText(String.valueOf(fazendeiroSessao.getIdade()));
+    }
+    
+    @FXML
+    private void handleBtnVoltarEdit(){
+    	mainScreen.setVisible(true);
+    	editContaScreen.setVisible(false);
+    	intializeRelatorioGeral();
+    }
+    
+    @FXML
+    private void handleBtnEditar() {
+    	try {
+    		
+    		if(!cpfEdit.getText().equals("")) {
+				fDAO = new FazendeiroDAO();
+		    	fazendeiro = new Fazendeiro();
+		    	
+		    	fazendeiro.setCpf(cpfEdit.getText());
+		    	fazendeiro.setIdade(Integer.parseInt(ageEdit.getText()));
+		    	fazendeiro.setNome(nameEdit.getText());
+		    	fazendeiro.setSenha(passwdEdit.getText());
+		    	fazendeiro.setTelefone(numberEdit.getText());
+		    	
+		    	fDAO.atualizar(fazendeiro, fazendeiroSessao.getCpf());
+		    	fazendeiroSessao = fazendeiro;
+		    	Alerts.updateConta();
+		    	handleBtnVoltarEdit();
+    		}else {
+        		Alerts.notUpdateConta();
+    		}
+    	}catch(Exception e) {
+    		System.out.println(e.toString());
+    		Alerts.notUpdateConta();
+    	}
+    }
+    
+    @FXML
+    private void handleBtnExcluir() {
+    	fDAO = new FazendeiroDAO();
+    	fDAO.deletar(fazendeiroSessao.getCpf());
+    	Alerts.deleteConta();
+		fazendeiroSessao = null;
+    	loginScreen.setVisible(true);
+    	editContaScreen.setVisible(false);
     }
 }

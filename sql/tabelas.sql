@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS Produto(
 CREATE TABLE IF NOT EXISTS Bode_produto(
 	id_bode INT,
 	id_produto INT,
-	CONSTRAINT id_bode FOREIGN KEY (id_bode) REFERENCES Bode(id),
-	CONSTRAINT id_produto FOREIGN KEY (id_produto) REFERENCES Produto(id),
+	CONSTRAINT id_bode FOREIGN KEY (id_bode) REFERENCES Bode(id) ON DELETE CASCADE,
+	CONSTRAINT id_produto FOREIGN KEY (id_produto) REFERENCES Produto(id) ON DELETE CASCADE,
 	PRIMARY KEY(id_bode, id_produto)
 );
 
