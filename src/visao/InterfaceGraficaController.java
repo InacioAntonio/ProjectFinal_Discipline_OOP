@@ -317,15 +317,19 @@ public class InterfaceGraficaController implements Initializable{
 		
 		fDAO = new FazendeiroDAO();
 		try {
-			fBusca = fDAO.buscar(cpf);
-			if(fBusca != null) {	
-				if(fBusca.getSenha().equals(senha)) {
-					fazendeiroSessao = fBusca;
-					intializeRelatorioGeral();
-			    	loginScreen.setVisible(false);
-			    	mainScreen.setVisible(true);
-			    	cpfInput.setText("");
-			    	passwdInput.setText("");
+			if(!cpf.trim().equals("")) {
+				fBusca = fDAO.buscar(cpf);
+				if(fBusca != null) {	
+					if(fBusca.getSenha().equals(senha)) {
+						fazendeiroSessao = fBusca;
+						intializeRelatorioGeral();
+				    	loginScreen.setVisible(false);
+				    	mainScreen.setVisible(true);
+				    	cpfInput.setText("");
+				    	passwdInput.setText("");
+					}
+				}else {
+					Alerts.notLogin();
 				}
 			}else {
 				Alerts.notLogin();
@@ -339,6 +343,11 @@ public class InterfaceGraficaController implements Initializable{
     private void handleBtnVoltarCad(){
     	loginScreen.setVisible(true);
     	cadasterScreen.setVisible(false);
+    	cpfCadaster.setText("");
+		nameCadaster.setText("");
+		ageCadaster.setText("");
+		numberCadaster.setText("");
+		passwdCadaster.setText("");
     }
     
     @FXML
@@ -370,6 +379,7 @@ public class InterfaceGraficaController implements Initializable{
 				fazendeiro = new Fazendeiro(nome, cpf, senha, idade, telefone);
 				fDAO.cadastrar(fazendeiro);
 				Alerts.cadaster();
+				cpfCadaster.setText("");
 				nameCadaster.setText("");
 				ageCadaster.setText("");
 				numberCadaster.setText("");
@@ -472,8 +482,7 @@ public class InterfaceGraficaController implements Initializable{
 						
 			pd = new ProdutoDAO();
 			pd.Cadastrar(produto);
-			if(!idBodeProdCad.getText().isEmpty()) {
-				System.out.println("ksaska");
+			if(!idBodeProdCad.getText().trim().isEmpty()) {
 				bodeEscolha = Integer.parseInt(idBodeProdCad.getText());
 		
 				bd = new BodeDAO();
@@ -558,7 +567,7 @@ public class InterfaceGraficaController implements Initializable{
     private void handleSelectionarProd() {
     	pd = new ProdutoDAO();
     	try {
-    		if(idProdEdit.getText()==null) {
+    		if(idProdEdit.getText().trim().equals("")) {
     			Alerts.typeCampusID();
     		}else {
     			int ProdutoEscolha = Integer.parseInt(idProdEdit.getText());
@@ -584,7 +593,7 @@ public class InterfaceGraficaController implements Initializable{
     private void handleEditProduto() {
     	pd = new ProdutoDAO();
     	try {
-    		if(idProdEdit.getText()==null) {
+    		if(idProdEdit.getText().trim().equals("")) {
     			Alerts.notEdit();
     		}else {
     			int ProdutoEscolha = Integer.parseInt(idProdEdit.getText());
@@ -665,7 +674,7 @@ public class InterfaceGraficaController implements Initializable{
     	pd = new ProdutoDAO();
     
     	try {
-    		if(idProdEdit.getText()==null) {
+    		if(idProdEdit.getText().trim().equals("")) {
     			Alerts.notDelete();
     		}else {
     			int ProdutoEscolha = Integer.parseInt(idProdEdit.getText());
@@ -830,7 +839,7 @@ public class InterfaceGraficaController implements Initializable{
     private void handleBtnEditar() {
     	try {
     		
-    		if(!cpfEdit.getText().equals("")) {
+    		if(!cpfEdit.getText().trim().equals("")) {
 				fDAO = new FazendeiroDAO();
 		    	fazendeiro = new Fazendeiro();
 		    	
