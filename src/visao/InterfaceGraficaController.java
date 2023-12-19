@@ -37,9 +37,10 @@ public class InterfaceGraficaController implements Initializable{
 	private Bode_produtoDAO bpDAO = new Bode_produtoDAO();
 	private Bode bode;
 	private Produto produto;
-	ArrayList<Bode> listaBode;
-	ArrayList<Produto> listaProduto;
-	ArrayList<Produto> listaRelProd;
+	private ArrayList<Bode> listaBode;
+	private ArrayList<Produto> listaProduto;
+	private ArrayList<Produto> listaRelProd;
+	private Fazendeiro teste;
 	private ObservableList<Relatorio_BodeProd> relatorioBodeProduto = FXCollections.observableArrayList();
 	private ObservableList<Relatorio_BodeProd> relatorioBodes = FXCollections.observableArrayList();
 	
@@ -407,19 +408,25 @@ public class InterfaceGraficaController implements Initializable{
     	try {
 			bode = new Bode();
 			bd  = new BodeDAO();
-			bode.setCpfFazendeiro(fazendeiroSessao.getCpf());
-			bode.setNome(nameBodeCad.getText());
-			bode.setGenero(femeaCad.isSelected() ? "Fêmea" : "Macho");
-			bode.setPeso(Float.parseFloat(pesoBodeCad.getText()));
-			bd.CadastrarBode(bode);
-			Alerts.cadasterBode();
+			if((femeaCad.isSelected() || machoCad.isSelected()) && !nameBodeCad.getText().trim().equals("")) {
+				bode.setCpfFazendeiro(fazendeiroSessao.getCpf());
+				bode.setNome(nameBodeCad.getText());
+				bode.setGenero(femeaCad.isSelected() ? "Fêmea" : "Macho");
+				bode.setPeso(Float.parseFloat(pesoBodeCad.getText()));
+				bd.CadastrarBode(bode);
+				Alerts.cadasterBode();
+				femeaCad.setSelected(false);
+				machoCad.setSelected(false);
+		    	mainScreen.setVisible(true);
+		    	cadasterBodeScreen.setVisible(false);
+			}else {
+				Alerts.notCadasterBode();
+			}
 
-			femeaCad.setSelected(false);
-			machoCad.setSelected(false);
 			nameBodeCad.setText("");
 			pesoBodeCad.setText("");
-	    	mainScreen.setVisible(true);
-	    	cadasterBodeScreen.setVisible(false);
+			femeaCad.setSelected(false);
+			machoCad.setSelected(false);
     	}catch(Exception e) {
 			Alerts.notCadasterBode();
     	}
@@ -473,15 +480,20 @@ public class InterfaceGraficaController implements Initializable{
     private void handleCadProduto(){
     	try {	
 			produto = new Produto();
-			produto.setCpf_fazendeiro(fazendeiroSessao.getCpf());
-			produto.setCategoria(categoriaProdCad.getText());
-			produto.setPeso(Float.parseFloat(pesoProdCad.getText()));
-			produto.setDescricao(descricaoProdCad.getText());
-			produto.setQuantidade(Integer.parseInt(qtdProdCad.getText()));
-			produto.setPreco(Float.parseFloat(precoProdCad.getText()));
+			if(!categoriaProdCad.getText().trim().equals("") && !pesoProdCad.getText().trim().equals("")
+					&& !descricaoProdCad.getText().trim().equals("") && !qtdProdCad.getText().trim().equals("")
+					&& !precoProdCad.getText().trim().equals("")) {
+				produto.setCpf_fazendeiro(fazendeiroSessao.getCpf());
+				produto.setCategoria(categoriaProdCad.getText());
+				produto.setPeso(Float.parseFloat(pesoProdCad.getText()));
+				produto.setDescricao(descricaoProdCad.getText());
+				produto.setQuantidade(Integer.parseInt(qtdProdCad.getText()));
+				produto.setPreco(Float.parseFloat(precoProdCad.getText()));
+			
 						
-			pd = new ProdutoDAO();
-			pd.Cadastrar(produto);
+				pd = new ProdutoDAO();
+				pd.Cadastrar(produto);
+		
 			if(!idBodeProdCad.getText().trim().isEmpty()) {
 				bodeEscolha = Integer.parseInt(idBodeProdCad.getText());
 		
@@ -501,6 +513,7 @@ public class InterfaceGraficaController implements Initializable{
 					Alerts.notCadasterProd();
 				}
 			}
+		
 				Alerts.cadasterProd();
 				idBodeProdCad.setText("");
 				pesoProdCad.setText("");
@@ -508,7 +521,10 @@ public class InterfaceGraficaController implements Initializable{
 				descricaoProdCad.setText("");
 				qtdProdCad.setText("");
 				precoProdCad.setText("");
-				handleBtnVoltarCadProd();		
+				handleBtnVoltarCadProd();
+			}else {
+	    		Alerts.notCadasterProd();
+			}
     	}catch(Exception e) {
     		Alerts.notCadasterProd();
     		System.out.println(e.toString());
@@ -839,20 +855,24 @@ public class InterfaceGraficaController implements Initializable{
     private void handleBtnEditar() {
     	try {
     		
-    		if(!cpfEdit.getText().trim().equals("")) {
+    		if(!cpfEdit.getText().trim().equals("")&& !passwdEdit.getText().trim().equals("") && !nameEdit.getText().trim().equals("") ) {
 				fDAO = new FazendeiroDAO();
 		    	fazendeiro = new Fazendeiro();
 		    	
-		    	fazendeiro.setCpf(cpfEdit.getText());
-		    	fazendeiro.setIdade(Integer.parseInt(ageEdit.getText()));
-		    	fazendeiro.setNome(nameEdit.getText());
-		    	fazendeiro.setSenha(passwdEdit.getText());
-		    	fazendeiro.setTelefone(numberEdit.getText());
-		    	
-		    	fDAO.atualizar(fazendeiro, fazendeiroSessao.getCpf());
-		    	fazendeiroSessao = fazendeiro;
-		    	Alerts.updateConta();
-		    	handleBtnVoltarEdit();
+		    	teste = fDAO.buscar(cpfEdit.getText());
+		    	if(teste == null || teste.getCpf().equals(fazendeiroSessao.getCpf())) {
+			    	fazendeiro.setCpf(cpfEdit.getText());
+			    	fazendeiro.setIdade(Integer.parseInt(ageEdit.getText()));
+			    	fazendeiro.setNome(nameEdit.getText());
+			    	fazendeiro.setSenha(passwdEdit.getText());
+			    	fazendeiro.setTelefone(numberEdit.getText());	
+			    	fDAO.atualizar(fazendeiro, fazendeiroSessao.getCpf());
+			    	fazendeiroSessao = fazendeiro;
+			    	Alerts.updateConta();
+			    	handleBtnVoltarEdit();
+		    	}else {
+	        		Alerts.notUpdateConta();
+		    	}
     		}else {
         		Alerts.notUpdateConta();
     		}

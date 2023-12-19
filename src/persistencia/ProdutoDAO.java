@@ -72,7 +72,7 @@ public class ProdutoDAO {
 			ResultSet rs = instrucao.executeQuery();
 			lista = new ArrayList<Produto>();
 			while(rs.next()) {
-				Produto p = new Produto(rs.getInt("id"),rs.getString("categoria"),rs.getString("descricao"),rs.getInt("Quantidade"),rs.getFloat("peso"),rs.getString("cpf_fazendeiro"));
+				Produto p = new Produto(rs.getInt("id"),rs.getString("categoria"),rs.getString("descricao"),rs.getInt("Quantidade"),rs.getFloat("peso"), rs.getFloat("preco"),rs.getString("cpf_fazendeiro"));
 				lista.add(p);
 			}
 			con.desconectar();
@@ -90,7 +90,7 @@ public class ProdutoDAO {
 			instrucao.setInt(1, Auxid);
 			ResultSet rs = instrucao.executeQuery();
 			if(rs.next()) {
-				p = new Produto(rs.getInt("id"),rs.getString("categoria"),rs.getString("descricao"),rs.getInt("Quantidade"),rs.getFloat("peso"),rs.getString("cpf_fazendeiro"));
+				p = new Produto(rs.getInt("id"),rs.getString("categoria"),rs.getString("descricao"),rs.getInt("Quantidade"),rs.getFloat("peso"), rs.getFloat("preco"),rs.getString("cpf_fazendeiro"));
 			}
 			con.desconectar();
 		}catch(Exception e) {
